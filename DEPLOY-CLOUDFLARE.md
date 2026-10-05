@@ -15,7 +15,7 @@ Keep the media outside the Git repository. The source package intentionally incl
 
 1. Sign in to Cloudflare. Open **R2 Object Storage**, create a bucket named `hardik-visuals-media`, and open it.
 2. Upload the extracted `assets` and `portfolio` trees, preserving every folder and filename. If the upload picker doesn't retain folders, use **Create folder** and upload the files inside each matching folder. Do not upload the ZIP as a single object or add its enclosing folder to the object paths.
-3. There are **51 required media objects**. The manifest lists their exact paths, sizes and content types. Folder-marker objects and the manifest itself do not count toward the 51.
+3. There are **61 required media objects**. The manifest lists their exact paths, sizes and content types. Folder-marker objects and the manifest itself do not count toward the 61.
 4. Check these exact keys exist:
 
 ```text
@@ -23,9 +23,9 @@ assets/intro.mp4
 assets/portrait.jpg
 assets/mascot/start.webp
 assets/mascot/smile.webp
-assets/work/project-2-revised-preview.mp4
+assets/work/project-2-v3-preview.mp4
 portfolio/thrive-on.mp4
-portfolio/deceived-revised.mp4
+portfolio/deceived-v3.mp4
 ```
 
 Keep `video/mp4` for MP4, `video/webm` for WebM, `image/webp` for WebP, `image/jpeg` for JPG, and `audio/mpeg` for MP3. [Cloudflare upload instructions](https://developers.cloudflare.com/r2/objects/upload-objects/).

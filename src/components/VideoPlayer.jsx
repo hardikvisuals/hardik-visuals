@@ -7,12 +7,7 @@ export default function VideoPlayer({ project, muted, onClose, reduced }) {
     video = useRef(null),
     panel = useRef(null);
   const [error, setError] = useState(false);
-  const [source, setSource] = useState(() => {
-    const connection = navigator.connection;
-    const compact = matchMedia("(max-width: 900px), (pointer: coarse)").matches ||
-      connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType || "");
-    return compact && project.mobileVideo ? project.mobileVideo : project.video;
-  });
+  const [source, setSource] = useState(project.video);
   useEffect(() => {
     const previous = document.activeElement;
     dialog.current.showModal();

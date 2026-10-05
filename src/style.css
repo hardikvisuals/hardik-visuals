@@ -1006,7 +1006,7 @@ dialog::backdrop {
 .menu-link:hover {
   transform: translateX(9px);
 }
-.menu-link > span {
+.menu-link > .menu-orb {
   font-size: 12px;
   letter-spacing: 0;
   opacity: 0;
@@ -1015,7 +1015,7 @@ dialog::backdrop {
     opacity 0.3s var(--smooth),
     transform 0.3s var(--snappy);
 }
-.menu-link:hover > span {
+.menu-link:hover > .menu-orb {
   opacity: 1;
   transform: translateX(0);
 }

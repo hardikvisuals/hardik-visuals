@@ -23,19 +23,22 @@ import { projects, tracks, facts } from "./data.js";
 
 const Gallery = lazy(() => import("./components/Gallery.jsx"));
 
-export default function App() {
+export default function App({ initialEntered = false, initialMenu = false, onAbout }) {
   const { reduced } = useMotion();
-  const [entered, setEntered] = useState(false),
+  const [entered, setEntered] = useState(initialEntered),
     [mode, setMode] = useState("spiral"),
     [sound, setSound] = useState(false);
-  const [selectedTrack, setSelectedTrack] = useState(0),
+  const [selectedTrack, setSelectedTrack] = useState(() => Math.floor(Math.random() * tracks.length)),
     [trackOpen, setTrackOpen] = useState(false),
-    [menu, setMenu] = useState(false);
+    [menu, setMenu] = useState(initialMenu);
   const [playing, setPlaying] = useState(!reduced),
     [hovered, setHovered] = useState(-1),
     [selected, setSelected] = useState(null);
   const [fact, setFact] = useState(0),
     [holding, setHolding] = useState(false);
+  const explicitTrack = useRef(false), profileTimer = useRef(null), profileHeld = useRef(false);
+  const [menuView, setMenuView] = useState(initialMenu ? "contact" : "menu");
+  const [available, setAvailable] = useState(false);
   const audio = useRef(null),
     gallery = useRef(null),
     header = useRef(null),
@@ -49,6 +52,7 @@ export default function App() {
     return () => {
       audio.current.dispose();
       clearTimeout(holdTimer.current);
+      clearTimeout(profileTimer.current);
     };
   }, []);
   useEffect(() => setPlaying(!reduced), [reduced]);
@@ -79,18 +83,30 @@ export default function App() {
     });
     return () => context.revert();
   }, [entered, reduced]);
+  function randomTrack() {
+    if (explicitTrack.current) return;
+    const index = Math.floor(Math.random() * tracks.length);
+    setSelectedTrack(index);
+    audio.current?.select(index);
+  }
+  function hire() {
+    setAvailable(true); setMenuView("contact"); setMenu(true);
+  }
   function enter(withSound) {
+    if (withSound) randomTrack();
     setSound(withSound);
     audio.current.setEnabled(withSound);
     audio.current.effect("click");
     setEntered(true);
   }
   function chooseTrack(i) {
+    explicitTrack.current = true;
     setSelectedTrack(i);
     audio.current?.select(i);
   }
   function toggleSound() {
     const value = !sound;
+    if (value) randomTrack();
     setSound(value);
     audio.current.setEnabled(value);
   }
@@ -219,16 +235,18 @@ export default function App() {
               <RollingText>list</RollingText>
             </button>
           </div>
+          <div className="header-actions"><button className="hire-pill" onClick={hire}><span className="availability-dot"/>hire me now</button>
           <Magnetic
             className="pill menu-button"
             onClick={() => {
+              setMenuView("menu");
               setMenu(true);
               setTrackOpen(false);
               audio.current.effect("click");
             }}
           >
             <RollingText>menu</RollingText> <span className="button-dot" />
-          </Magnetic>
+          </Magnetic></div>
         </header>
         <div className="gallery-caption" aria-live="polite">
           {hovered >= 0 && (
@@ -245,9 +263,13 @@ export default function App() {
         <footer className="site-footer" ref={footer}>
           <button
             className="identity"
+            onPointerDown={() => { profileHeld.current = false; profileTimer.current = setTimeout(() => {profileHeld.current = true;setAvailable(true);}, 600); }}
+            onPointerUp={() => clearTimeout(profileTimer.current)}
+            onPointerCancel={() => clearTimeout(profileTimer.current)}
+            onPointerLeave={() => clearTimeout(profileTimer.current)}
             onClick={() => {
-              setFact((fact + 1) % facts.length);
-              reactMascot();
+              if(profileHeld.current) return;
+              if(available) hire(); else onAbout();
             }}
           >
             <span className="identity-icon">
@@ -259,7 +281,7 @@ export default function App() {
             <span className="identity-copy">
               <span className="eyebrow">A LITTLE ABOUT ME</span>
               <span key={fact} className="fact-text">
-                {facts[fact]}
+                {available ? "Available now for work — hire me now" : facts[fact]}
               </span>
             </span>
           </button>
@@ -347,14 +369,16 @@ export default function App() {
           />
         )}
       </div>
-      <Intro
+      {!initialEntered && <Intro
         onEnter={enter}
         selectedTrack={selectedTrack}
         onTrack={chooseTrack}
         reduced={reduced}
-      />
+      />}
       {menu && (
         <Menu
+          onAbout={onAbout}
+          initialView={menuView}
           onClose={() => setMenu(false)}
           onWorks={() => {
             setMode("spiral");

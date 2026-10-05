@@ -6,6 +6,12 @@
     "sha256": "ecf5d7e5bf1f36131c85a1885e8ed13bc48d69c6c70196d43c7f54f0ecd7b8a4"
   },
   {
+    "key": "assets/intro-motion-v2.webp",
+    "bytes": 183670,
+    "contentType": "application/octet-stream",
+    "sha256": "6f80f7ad1bb59c97e6776b18f380d2880f44a5d872d189cfc1498d1133aff9ca"
+  },
+  {
     "key": "assets/intro-face-frame.webp",
     "bytes": 16392,
     "contentType": "application/octet-stream",
@@ -156,16 +162,16 @@
     "sha256": "472f408f4ee6aaffde8f67d757697fa902aa2fc82fb7c87fc516e04b9487271c"
   },
   {
-    "key": "assets/work/project-2-revised.webp",
-    "bytes": 15972,
+    "key": "assets/work/project-2-v3.webp",
+    "bytes": 46378,
     "contentType": "application/octet-stream",
-    "sha256": "a0cedada19b78ca7fab3afd4aa928a1f315e154b9466b1ea737e1d0c181270dd"
+    "sha256": "6cd7cd3f11a5be651c4b21140b4eef9efb0d90fc08598ba52c47ad414b0824e6"
   },
   {
-    "key": "assets/work/project-2-revised-preview.mp4",
-    "bytes": 121432,
+    "key": "assets/work/project-2-v3-preview.mp4",
+    "bytes": 246429,
     "contentType": "video/mp4",
-    "sha256": "a710d9c53de3e13134be559a46b0e4b4d500c0b641a71e38e604ee55500ed216"
+    "sha256": "88c192dc6bd125fee29b30c9d898322b9c2360695387f24fc6590c07a2a7b692"
   },
   {
     "key": "assets/work/project-3.webp",
@@ -258,10 +264,10 @@
     "sha256": "2b84e9f55fc263424d5b56081149a346d8b38e9cfbde6aa7b593b7ff4fa4e93b"
   },
   {
-    "key": "portfolio/deceived-revised.mp4",
-    "bytes": 13224009,
+    "key": "portfolio/deceived-v3.mp4",
+    "bytes": 20876802,
     "contentType": "video/mp4",
-    "sha256": "985a3b30b742bd45870db4d209f2ad54c6068a12738ec103eca480e460752d69"
+    "sha256": "711254c4ce208a1e45984d4bc17b5c568473ed2dc82a8aec2108f775b8c7f7b5"
   },
   {
     "key": "portfolio/3rd/Devyn Jato - Talking Head.mp4",
@@ -304,5 +310,497 @@
     "bytes": 23906955,
     "contentType": "video/mp4",
     "sha256": "6ebdb3563abff0d47e56bca461baaf666fd5836d643df7b2f5cbc5dca049d47e"
+  },
+  {
+    "key": "portfolio/mobile/project-1-v3.mp4",
+    "bytes": 4725058,
+    "contentType": "video/mp4",
+    "sha256": "b355b22e1bc8f6164e2fa024e32b6c0d1d0908d1ce1047a7a656b001a9f74481"
+  },
+  {
+    "key": "portfolio/mobile/project-2-v3.mp4",
+    "bytes": 2657904,
+    "contentType": "video/mp4",
+    "sha256": "678b6e6553f3f36732458692810e50b67c937301ea5e8292b334ff3dfc281e71"
+  },
+  {
+    "key": "portfolio/mobile/project-3-v3.mp4",
+    "bytes": 4687353,
+    "contentType": "video/mp4",
+    "sha256": "5eb01a56f376b126dd011b65e0eadb62e0d7bf604798cacd8235a6a6f948f35c"
+  },
+  {
+    "key": "portfolio/mobile/project-4-v3.mp4",
+    "bytes": 1832718,
+    "contentType": "video/mp4",
+    "sha256": "f539bd9a05102d415fd1399c64eb54da12eeda09ee8e0f92b00b04c10bc1b295"
+  },
+  {
+    "key": "portfolio/mobile/project-5-v3.mp4",
+    "bytes": 999303,
+    "contentType": "video/mp4",
+    "sha256": "90422e80a6714ff97b3caf7e8e8474bb9adcc88201ee224366ee89974ee63df3"
+  },
+  {
+    "key": "portfolio/mobile/project-6-v3.mp4",
+    "bytes": 3293695,
+    "contentType": "video/mp4",
+    "sha256": "7110875068a8f14dc7bea98e80f10f291e0419ce40b98ef289b475eeb1aedc88"
+  },
+  {
+    "key": "portfolio/mobile/project-7-v3.mp4",
+    "bytes": 4421881,
+    "contentType": "video/mp4",
+    "sha256": "7199ab3ab2478191014a628dac3b4e4bb8d93f7b73869b7e2faba4de1ceed149"
+  },
+  {
+    "key": "portfolio/mobile/project-8-v3.mp4",
+    "bytes": 3955162,
+    "contentType": "video/mp4",
+    "sha256": "eac73e7d86170e384ccaae6c2a1dfe0db515abd06c66c745c5dd9ca5bf962db6"
+  },
+  {
+    "key": "portfolio/mobile/project-9-v3.mp4",
+    "bytes": 8127681,
+    "contentType": "video/mp4",
+    "sha256": "1a5ddf04ab79bb380f1fbc2273008734b2b7dc794fce6782e89c81ae927a8912"
+  },
+  {
+    "key": "assets/about/artist.webp",
+    "bytes": 99846,
+    "contentType": "application/octet-stream",
+    "sha256": "0784bbb4e2d89fb2f4181411911fae6b7d2d7e33810c97c56882f1a6b4e2334d"
+  },
+  {
+    "key": "assets/about/athlete.webp",
+    "bytes": 95956,
+    "contentType": "application/octet-stream",
+    "sha256": "92a1715751f7d8da6de7e7b7337aaee061ba6c68822cacc32b81de6ed8341178"
+  },
+  {
+    "key": "assets/about/camera.webp",
+    "bytes": 45822,
+    "contentType": "application/octet-stream",
+    "sha256": "a757ab1ec157e43cf93a5455228a70caddc07f509b78e2bd944000e79ca71dcd"
+  },
+  {
+    "key": "assets/about/cat.webp",
+    "bytes": 51604,
+    "contentType": "application/octet-stream",
+    "sha256": "a715268557d9b898096d0f50a709289ad91b46a7fbb17e4f2083520871be0e89"
+  },
+  {
+    "key": "assets/about/challenge.webp",
+    "bytes": 56942,
+    "contentType": "application/octet-stream",
+    "sha256": "bce23eee3bf4220f057e6c6a6f6c1407ce328a5b518a8902834cddc899e270fa"
+  },
+  {
+    "key": "assets/about/cinema.webp",
+    "bytes": 25338,
+    "contentType": "application/octet-stream",
+    "sha256": "cf450636560b095016059bfbaabf669624263f3fb09c336f041dfc0459cf6c6e"
+  },
+  {
+    "key": "assets/about/coffee.webp",
+    "bytes": 62738,
+    "contentType": "application/octet-stream",
+    "sha256": "2ce73ce235968729d6e32120dd3f5a4e8e3bfcea2e77d7b0a491041a1e236c77"
+  },
+  {
+    "key": "assets/about/deadlift.webp",
+    "bytes": 58682,
+    "contentType": "application/octet-stream",
+    "sha256": "4d61d3fb197205fd174c444884e68c20df7bcee98bbf27c0396d77b9e18298d2"
+  },
+  {
+    "key": "assets/about/fashion.webp",
+    "bytes": 82764,
+    "contentType": "application/octet-stream",
+    "sha256": "9453e90d90a520f6bcf7256b268dc12bf4af49fa072032066a16c18862015dbc"
+  },
+  {
+    "key": "assets/about/filmset.webp",
+    "bytes": 30868,
+    "contentType": "application/octet-stream",
+    "sha256": "b90e72595f934fa51dd3c8a170b0f2c043e2762e34047195c20df1f634ac80f1"
+  },
+  {
+    "key": "assets/about/flowers.webp",
+    "bytes": 89412,
+    "contentType": "application/octet-stream",
+    "sha256": "dabe4977f36a7f437f00213e897dc265286901b06bb98b978fec5393ba58c554"
+  },
+  {
+    "key": "assets/about/friends.webp",
+    "bytes": 64038,
+    "contentType": "application/octet-stream",
+    "sha256": "7c4d3c91f887449b3e4da7ec7c4c1d39f4797b582410be4a336dd59244483e5c"
+  },
+  {
+    "key": "assets/about/gaming-loop.mp4",
+    "bytes": 181830,
+    "contentType": "video/mp4",
+    "sha256": "31ddfa84e67b4d08a041aec8e4a30a8520c1297b689a15cc17980f4e28ef1dfa"
+  },
+  {
+    "key": "assets/about/gaming.webp",
+    "bytes": 76554,
+    "contentType": "application/octet-stream",
+    "sha256": "da9d0b57dbf7b26b83970b785c78ce369fd73733a46d4ddeabf54432c7c971a3"
+  },
+  {
+    "key": "assets/about/helmet.webp",
+    "bytes": 53308,
+    "contentType": "application/octet-stream",
+    "sha256": "f342af0165222bed91c69d8a8add4c7afc21199c4905ff439d302f0883c0dd11"
+  },
+  {
+    "key": "assets/about/night.webp",
+    "bytes": 229890,
+    "contentType": "application/octet-stream",
+    "sha256": "18ee94cece07ec8cc4b106054449142f784c3cb263934d12d3c3f07a62efc029"
+  },
+  {
+    "key": "assets/about/perfume.webp",
+    "bytes": 78800,
+    "contentType": "application/octet-stream",
+    "sha256": "8d7c3d7fe6cb67003e5242ad14fe5805585f28c054fb4614c36a79309ac456c3"
+  },
+  {
+    "key": "assets/about/portrait.webp",
+    "bytes": 86832,
+    "contentType": "application/octet-stream",
+    "sha256": "3d2f8a7b99cc5b9970dd03f3f0bd6eb646b2f58a07392c5008bc65afe04f0579"
+  },
+  {
+    "key": "assets/about/ride.mp4",
+    "bytes": 715370,
+    "contentType": "video/mp4",
+    "sha256": "1754ec4dab8f90427fc72994ef529864036d35af3ccad25b4751d1e6ebc6d384"
+  },
+  {
+    "key": "assets/about/run.webp",
+    "bytes": 85646,
+    "contentType": "application/octet-stream",
+    "sha256": "fb5e984218b1b875dc00b28120690d3a281a46fb423afda1311f3d821feac8b4"
+  },
+  {
+    "key": "assets/about/signature.webp",
+    "bytes": 21672,
+    "contentType": "application/octet-stream",
+    "sha256": "f6b45314a4561c283ffdb9239068c881067e8571638ae8d5ec4aed7c6745c349"
+  },
+  {
+    "key": "assets/about/squat.webp",
+    "bytes": 47238,
+    "contentType": "application/octet-stream",
+    "sha256": "b77a583fd2a54386a1abb3142658dff3358aea4ce3cfd542808804dbd7f218f9"
+  },
+  {
+    "key": "assets/about/swim.webp",
+    "bytes": 41580,
+    "contentType": "application/octet-stream",
+    "sha256": "edbe16d158bff8892e51344c6d854a0ff12d95d64117b8ee86d46224293fddbe"
+  },
+  {
+    "key": "assets/about-v5/artist.webp",
+    "bytes": 168582,
+    "contentType": "application/octet-stream",
+    "sha256": "df905c2403e5da683be3c2d8e91f7ba2dff37b656ee5e5484892ab4dff92b092"
+  },
+  {
+    "key": "assets/about-v5/athlete.webp",
+    "bytes": 166194,
+    "contentType": "application/octet-stream",
+    "sha256": "18d159f8d44efd57e0bae261cf9e77fd4a974fe9cc469f6dad83ec1c5979ce03"
+  },
+  {
+    "key": "assets/about-v5/back.webp",
+    "bytes": 349660,
+    "contentType": "application/octet-stream",
+    "sha256": "18fdeb0fd5ece4a23ec106c5a72d7dc7df6aec04c63fbbaff6163394af3c2e9c"
+  },
+  {
+    "key": "assets/about-v5/cake.webp",
+    "bytes": 929922,
+    "contentType": "application/octet-stream",
+    "sha256": "d19765f3fc5e9ed80f6c9ee61addb2ac406c3f9279f7dc3660f3bacba05e8513"
+  },
+  {
+    "key": "assets/about-v5/camera.webp",
+    "bytes": 105634,
+    "contentType": "application/octet-stream",
+    "sha256": "fd79053b2b9be5214cea88dba74fc43d1ddec699cf8cc3c394dbad1468cec586"
+  },
+  {
+    "key": "assets/about-v5/cat.webp",
+    "bytes": 796530,
+    "contentType": "application/octet-stream",
+    "sha256": "c5848ad18538aa5787891139dcd0aca5ab7d9d1a09d482b3e96b79cc33b7f253"
+  },
+  {
+    "key": "assets/about-v5/challenge.webp",
+    "bytes": 145188,
+    "contentType": "application/octet-stream",
+    "sha256": "0618207d4b4b895610ef57ac4269d4865a45694f0856ba7e470cc871fad45020"
+  },
+  {
+    "key": "assets/about-v5/cinema.webp",
+    "bytes": 565238,
+    "contentType": "application/octet-stream",
+    "sha256": "2f86af667b4d46ce72600dea2dd20645463fda2b9df660f8886c7797d0de6606"
+  },
+  {
+    "key": "assets/about-v5/coffee.webp",
+    "bytes": 166736,
+    "contentType": "application/octet-stream",
+    "sha256": "1fad1166657feda726e4cefa92abf8af4e15e2ef1f91c06067bc35b98d044a42"
+  },
+  {
+    "key": "assets/about-v5/deadlift-v7.webp",
+    "bytes": 916276,
+    "contentType": "application/octet-stream",
+    "sha256": "ff99bf8b79a4ab41514f39c295c3713b1bc01d535f2550c5c93bb67b8da774d7"
+  },
+  {
+    "key": "assets/about-v5/deadlift.webp",
+    "bytes": 143040,
+    "contentType": "application/octet-stream",
+    "sha256": "3ff953e6e856d3e4f9af023a7c4798a972aedb076d9eb82c0ef3c57db3c48b40"
+  },
+  {
+    "key": "assets/about-v5/fashion.webp",
+    "bytes": 325768,
+    "contentType": "application/octet-stream",
+    "sha256": "f8adb98730a22e8ec62fd16ee5bf970419ead7325e142aa0bef19f2151e690cd"
+  },
+  {
+    "key": "assets/about-v5/filmset-v7.webp",
+    "bytes": 1202656,
+    "contentType": "application/octet-stream",
+    "sha256": "5e43a4ee6393f81046949c2a37f561da171bdd7c1367c60756361b0babfff1d9"
+  },
+  {
+    "key": "assets/about-v5/filmset.webp",
+    "bytes": 67428,
+    "contentType": "application/octet-stream",
+    "sha256": "9976124c22416ee76f555bc0fa928155d0c4063a7e328ccadc8a46ba5ac13484"
+  },
+  {
+    "key": "assets/about-v5/fit-v7.webp",
+    "bytes": 1345848,
+    "contentType": "application/octet-stream",
+    "sha256": "5ec42845cb10b78ea33f28d0376296404d1494bdbbe373ed611e5a20dc5d2f33"
+  },
+  {
+    "key": "assets/about-v5/fit.webp",
+    "bytes": 1164960,
+    "contentType": "application/octet-stream",
+    "sha256": "8d937cee593d5aa89d83566d21be23a6325444f54e185822a1e65d4e9786540a"
+  },
+  {
+    "key": "assets/about-v5/flowers.webp",
+    "bytes": 409166,
+    "contentType": "application/octet-stream",
+    "sha256": "073eedbec02fed0c43cb351adf2b8a8447821910d2e5b4618730a07c64839331"
+  },
+  {
+    "key": "assets/about-v5/food.webp",
+    "bytes": 772972,
+    "contentType": "application/octet-stream",
+    "sha256": "f95f948964263693efc13a5aeab578add8c46525e629b350a2f4bf4a6a24685f"
+  },
+  {
+    "key": "assets/about-v5/friends.webp",
+    "bytes": 144428,
+    "contentType": "application/octet-stream",
+    "sha256": "7e04fd74bd4a3a4e0c1a60e46c587224027d2c9c01be69b567383ced2b7b21ae"
+  },
+  {
+    "key": "assets/about-v5/gaming-loop.mp4",
+    "bytes": 943886,
+    "contentType": "video/mp4",
+    "sha256": "825a8ec78c6fb926034ffcb06be21198e2b4cec23c6c10dda04d17bbe7480b34"
+  },
+  {
+    "key": "assets/about-v5/gaming.webp",
+    "bytes": 359550,
+    "contentType": "application/octet-stream",
+    "sha256": "c5c64ad0b05292240eb9a95650dffda1d06ce8585ca54cf14c395dea41f9a38e"
+  },
+  {
+    "key": "assets/about-v5/helmet.webp",
+    "bytes": 99360,
+    "contentType": "application/octet-stream",
+    "sha256": "53a155916448a4db64ab3ed79e50b2592bd1bd6b081304e42d979c7102b8fcc5"
+  },
+  {
+    "key": "assets/about-v5/immortal.webp",
+    "bytes": 12756,
+    "contentType": "application/octet-stream",
+    "sha256": "fa8838c098361cac99e7eeccc370548bc0cc79508a72bb9a4114161852cc2a19"
+  },
+  {
+    "key": "assets/about-v5/marshall.webp",
+    "bytes": 1163506,
+    "contentType": "application/octet-stream",
+    "sha256": "0043b829d7a9dfef44a35bb7a691a8f7437371377f84da71cab321f5c36f7b6f"
+  },
+  {
+    "key": "assets/about-v5/monster.webp",
+    "bytes": 2266662,
+    "contentType": "application/octet-stream",
+    "sha256": "2002440a056c29f326c02c5cf6d1c7398177cf29f63e1d0fb85efbaa567dd8c1"
+  },
+  {
+    "key": "assets/about-v5/night.webp",
+    "bytes": 529242,
+    "contentType": "application/octet-stream",
+    "sha256": "6475ae81c702c211bfcfe3d3ce426b2a41402c3b001c65b1d6cc944b63c64b16"
+  },
+  {
+    "key": "assets/about-v5/peacock.webp",
+    "bytes": 5506,
+    "contentType": "application/octet-stream",
+    "sha256": "a69ed508c54d478450aa8c292fbef7e3130a22e903b11f4db493fbf1dbb8dc7d"
+  },
+  {
+    "key": "assets/about-v5/perfume.webp",
+    "bytes": 202274,
+    "contentType": "application/octet-stream",
+    "sha256": "7f2c9a2bc56c8b58ff73057e617acc673875bf6d4ec4ed2e20a2c707b73c1f4f"
+  },
+  {
+    "key": "assets/about-v5/pfp-v7.webp",
+    "bytes": 770252,
+    "contentType": "application/octet-stream",
+    "sha256": "b7ae89954ae6bb8247fc8a62b28e6a527aaf4eee6ddb397a9059ca5b17938d91"
+  },
+  {
+    "key": "assets/about-v5/portrait.webp",
+    "bytes": 743968,
+    "contentType": "application/octet-stream",
+    "sha256": "8b92dc3012f9f9a37a4107e4271377bf65903cc2f7cf8b1ef451199187aa7b46"
+  },
+  {
+    "key": "assets/about-v5/ride.mp4",
+    "bytes": 3716348,
+    "contentType": "video/mp4",
+    "sha256": "797549f92a4231b8bba9b10069dd2f803851e639ae95ae0cb8f182ef129a126d"
+  },
+  {
+    "key": "assets/about-v5/run.webp",
+    "bytes": 198824,
+    "contentType": "application/octet-stream",
+    "sha256": "a9bd9f1ad8bf4b1a5a35c1a12afe6e7436a9234ec4226f309935793e36bb1cf2"
+  },
+  {
+    "key": "assets/about-v5/signature.webp",
+    "bytes": 27348,
+    "contentType": "application/octet-stream",
+    "sha256": "6c6c6720bc4061ff677162510ce7e86f8cfe48473076a51039dc3b736801bd43"
+  },
+  {
+    "key": "assets/about-v5/spiderman.webp",
+    "bytes": 1690670,
+    "contentType": "application/octet-stream",
+    "sha256": "30c7ad4cf39f9048f8b9002f31fd36b261e36facf808c0bfa68b0393db4a79fb"
+  },
+  {
+    "key": "assets/about-v5/squat.webp",
+    "bytes": 135084,
+    "contentType": "application/octet-stream",
+    "sha256": "9d28b7547e9f5eacaf3511f822e65df5b6ca81ca03287d1a42efe199341469ae"
+  },
+  {
+    "key": "assets/about-v5/swim.webp",
+    "bytes": 770638,
+    "contentType": "application/octet-stream",
+    "sha256": "87c79348be33a8072c0163b9c61d14d2a2f2741e54848f34734053b0fd0aeb45"
+  },
+  {
+    "key": "assets/intro-handoff-hq-v4.webp",
+    "bytes": 90330,
+    "contentType": "application/octet-stream",
+    "sha256": "7350534e61bef460c203bd8fffc4f97a2825de2fe743d4cacc7e46c2cbc575de"
+  },
+  {
+    "key": "assets/intro-face-hq-v4.webp",
+    "bytes": 62564,
+    "contentType": "application/octet-stream",
+    "sha256": "c50ab1c8f943b574e0541a5c05fa002527132ebca2cf48f65ef03398da075bbe"
+  },
+  {
+    "key": "assets/intro-short-v4.mp4",
+    "bytes": 5534193,
+    "contentType": "video/mp4",
+    "sha256": "5a690d67554132add0efa24199fb9745606a3fe5c700dc2d1011da543547f4ac"
+  },
+  {
+    "key": "assets/intro-short-hq-v4.webp",
+    "bytes": 3797660,
+    "contentType": "application/octet-stream",
+    "sha256": "360571cd4a26fa935dabc102b4a32580167920ac21be39467384a6ae52255285"
+  },
+  {
+    "key": "assets/mascot/start-hq-v4.webp",
+    "bytes": 78208,
+    "contentType": "application/octet-stream",
+    "sha256": "d3b55b9ced5f7607194c231de9907a9a0efb827da5f608feb25781dd0216ce7b"
+  },
+  {
+    "key": "assets/mascot/idle-hq-v4.webp",
+    "bytes": 3972350,
+    "contentType": "application/octet-stream",
+    "sha256": "f528a197c2c2e02450eb68c83b7203a68f7a51c58dbbaed5c189bef3ae83897a"
+  },
+  {
+    "key": "assets/mascot/sad-hq-v4.webp",
+    "bytes": 4026122,
+    "contentType": "application/octet-stream",
+    "sha256": "0a06d88355c79c010298e04ca7de2e1d87c605f68cace92f9faeda8860fac385"
+  },
+  {
+    "key": "assets/mascot/smile-hq-v4.webp",
+    "bytes": 4114270,
+    "contentType": "application/octet-stream",
+    "sha256": "7d1508aef65dcb1389ffda5b1356bfbf6b124884bfc18bf3f3b8f9523592c42a"
+  },
+  {
+    "key": "assets/mascot/wow-hq-v4.webp",
+    "bytes": 3975654,
+    "contentType": "application/octet-stream",
+    "sha256": "cfad14531461a1ad01fd4b90867c154af5cb0667274d4b23434495daca11cdf0"
+  },
+  {
+    "key": "assets/mascot/idle-hq-v6.webp",
+    "bytes": 3965648,
+    "contentType": "application/octet-stream",
+    "sha256": "8b8394371d271e904ddf6025d4dbb284c901a0b995eb59547331d7377889b6f4"
+  },
+  {
+    "key": "assets/mascot/sad-hq-v6.webp",
+    "bytes": 4022026,
+    "contentType": "application/octet-stream",
+    "sha256": "8f741df4523ddb08fc4ba77a10f59b53f13d35c9c311811ac7789cc05acea75a"
+  },
+  {
+    "key": "assets/mascot/smile-hq-v6.webp",
+    "bytes": 4105834,
+    "contentType": "application/octet-stream",
+    "sha256": "35d1c19b8f7f45911c131bf28363758a7f56a56689eae6bb5fbefc331df37878"
+  },
+  {
+    "key": "assets/mascot/start-hq-v6.webp",
+    "bytes": 70902,
+    "contentType": "application/octet-stream",
+    "sha256": "f1c930d221d81aeaf11c161a6f9a050d8019ba6d3aaa2a4a3646a89d2f95fe4c"
+  },
+  {
+    "key": "assets/mascot/wow-hq-v6.webp",
+    "bytes": 3973426,
+    "contentType": "application/octet-stream",
+    "sha256": "535ecb7c93556866a02213628318b2f8813c7d6a9583b7a6947b15ac293b5db6"
   }
 ]

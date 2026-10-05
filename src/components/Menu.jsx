@@ -3,13 +3,13 @@ import gsap from "gsap";
 import RollingText from "./RollingText.jsx";
 import CloseButton from "./CloseButton.jsx";
 
-export default function Menu({ onClose, onWorks, reduced }) {
+export default function Menu({ onClose, onWorks, onAbout, initialView = "menu", reduced }) {
   const dialog = useRef(null),
     panel = useRef(null),
     body = useRef(null),
     busy = useRef(false),
     closeTween = useRef(null);
-  const [view, setView] = useState("menu");
+  const [view, setView] = useState(initialView);
   useLayoutEffect(() => {
     const previous = document.activeElement;
     dialog.current.showModal();
@@ -66,12 +66,12 @@ export default function Menu({ onClose, onWorks, reduced }) {
       gsap.set(body.current, { opacity: 1, y: 0, rotateX: 0 });
       gsap.fromTo(
         view === "menu" ? ".menu-link" : ".menu-content>*",
-        { opacity: 0, y: reduced ? 0 : 40, rotateX: reduced ? 0 : -18 },
+        { opacity: 0, y: reduced ? 0 : 22, rotateX: 0 },
         {
           opacity: 1,
           y: 0,
           rotateX: 0,
-          duration: reduced ? 0.15 : 0.7,
+          duration: reduced ? 0.15 : 0.6,
           stagger: reduced ? 0 : 0.07,
           delay: view === "menu" ? 0.2 : 0.06,
           ease: "power4.out",
@@ -86,7 +86,7 @@ export default function Menu({ onClose, onWorks, reduced }) {
     gsap.to(body.current, {
       opacity: 0,
       y: reduced ? 0 : -24,
-      rotateX: reduced ? 0 : 6,
+      rotateX: 0,
       duration: reduced ? 0.12 : 0.24,
       ease: "power2.in",
       onComplete: () => setView(next),
@@ -127,7 +127,7 @@ export default function Menu({ onClose, onWorks, reduced }) {
         if (e.target === dialog.current) close();
       }}
     >
-      <div className="menu-sheet" data-view={view} ref={panel}>
+      <div className="menu-sheet" data-view={view} data-motion={reduced ? "reduced" : "full"} ref={panel}>
         <div className="menu-top">
           <span>HARDIK VISUALS®</span>
           <CloseButton onClick={() => close()} label="Close menu" />
@@ -144,11 +144,11 @@ export default function Menu({ onClose, onWorks, reduced }) {
                   className="menu-link"
                   key={label}
                   onClick={() =>
-                    label === "works" ? close(true) : navigate(label)
+                    label === "works" ? close(true) : label === "about" ? onAbout() : navigate(label)
                   }
                 >
                   <small className="menu-number">{num}</small>
-                  <RollingText>{label}</RollingText>
+                  <span className="menu-label-wrap"><RollingText>{label === "about" ? "about me" : label}</RollingText>{label === "about" && <small className="menu-about-hint">Get to know the person behind the work.</small>}</span>
                   <span className="menu-orb">↗︎</span>
                 </button>
               ))}
@@ -184,11 +184,11 @@ export default function Menu({ onClose, onWorks, reduced }) {
                 </>
               ) : (
                 <>
-                  <p className="eyebrow">LET’S CREATE SOMETHING</p>
+                  <p className="eyebrow">AVAILABLE NOW FOR WORK</p>
                   <h2>
-                    What’s
+                    Let’s make
                     <br />
-                    on your mind?
+                    something great.
                   </h2>
                   <div className="contact-links">
                     <a href="mailto:hardikvisuals.work@gmail.com">

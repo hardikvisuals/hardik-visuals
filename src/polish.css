@@ -460,6 +460,9 @@
 .back-link:hover:after {
   transform: scaleX(1);
 }
+.menu-about-hint { display: block; font-size: 11px; letter-spacing: 0; font-weight: 400; margin: 8px 0 0; }
+.menu-link .menu-label-wrap { display: block; }
+.menu-link .menu-label-wrap .rolling-text { display: inline-block; }
 .contact-links a {
   position: relative;
   isolation: isolate;
@@ -842,3 +845,35 @@
 [data-motion="reduced"] .pill:after {
   transition: opacity 0.2s;
 }
+
+/* Launch polish: keep the branding above the oversized intro film on phones. */
+.intro-top{z-index:5;top:max(24px,env(safe-area-inset-top));min-height:22px;overflow:visible}
+.intro-top>span:first-child{display:block;line-height:1.5;white-space:nowrap}
+.mascot-art .mascot-start{transition:none}
+.mascot-art .mascot-fallback{transition:opacity .1s ease-out}
+.header-actions{display:flex;align-items:center;gap:10px}
+.hire-pill{display:flex;align-items:center;gap:8px;padding:14px 18px;border:1px solid #baf76770;border-radius:99px;background:#141a0e;color:#d4ff9d;font-size:12px;transition:transform .25s var(--snappy)}
+.hire-pill:hover{transform:translateY(-3px)}
+.availability-dot{width:5px;height:5px;border-radius:50%;background:#baf767;box-shadow:0 0 10px #baf76766}
+.menu-label-wrap{min-width:0}.menu-about-hint{line-height:1.4;color:#69705e;font-size:12px}
+.menu-link{padding-top:14px;padding-bottom:14px}
+@media(max-width:600px){
+ .intro-top{top:calc(env(safe-area-inset-top) + 22px);left:22px;right:22px;line-height:1.5}
+ .intro-bottom .motion-choice{z-index:6;top:calc(env(safe-area-inset-top) + 54px)}
+ .header-actions{gap:6px}.hire-pill{font-size:10px;padding:12px 10px;gap:5px}
+ .site-header{gap:8px}.wordmark{font-size:16px}.brand{gap:6px}
+ .menu-link{font-size:clamp(44px,13vw,66px)}.menu-about-hint{font-size:10px;max-width:210px}
+ .menu-sheet{padding-left:24px;padding-right:24px}.menu-bottom{font-size:12px}
+ .identity-copy .fact-text{max-width:230px;line-height:1.4}
+}
+
+.menu-main,.menu-main nav,.menu-link,.menu-content{visibility:visible}.menu-main{overflow-y:auto;overflow-x:hidden}.menu-link{display:flex!important;align-items:center;gap:16px;min-height:90px}.menu-label-wrap{flex:1}.menu-link .menu-label-wrap{font-size:inherit}@media(max-width:900px){.header-actions .hire-pill{display:none}.menu-link{font-size:48px!important;min-height:90px}.menu-main{padding:25px 0}.menu-sheet{max-height:100dvh}}
+
+/* Menu labels must not inherit the old hover-only arrow treatment. */
+.menu-link>.menu-label-wrap{opacity:1!important;transform:none!important;visibility:visible!important;font-size:inherit!important;letter-spacing:inherit}.menu-link>.menu-orb{opacity:1!important;transform:none!important}.menu-number{opacity:.6;left:0;top:auto;position:relative;min-width:14px}.mascot-art{inset:-30%}.brand{gap:19px}@media(max-width:900px){.mascot-art{inset:-24%}}
+/* Hold the actual film's last frame: only the controls fade in. */
+.intro-live .intro-face,.intro-live .intro-copy,.intro-live .intro-face-glow{visibility:hidden!important}
+
+/* Keep touch labels still and readable; hover motion belongs to pointer devices. */
+@media(hover:none){.menu-sheet :is(button,a):hover:not(:focus-visible) .rolling-letter>span{transform:none}}
+.menu-sheet[data-motion="reduced"] .rolling-letter>span{transition:none;transform:none!important}

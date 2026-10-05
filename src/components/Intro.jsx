@@ -37,11 +37,11 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
       gsap
         .timeline()
         .set(live.current, { opacity: 1, y: 0 }, 0)
-        .set(film.current, { opacity: 0 }, 0)
+        .set(film.current, { opacity: 1 }, 0)
         .to(
           live.current,
           {
-            y: reduced ? 0 : -26,
+            y: 0,
             duration: reduced ? 0.15 : 1.1,
             ease: "power3.inOut",
           },
@@ -49,27 +49,27 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
         )
         .fromTo(
           ".entry-button-wrap",
-          { opacity: 0, y: reduced ? 0 : 32, scale: reduced ? 1 : 0.94 },
+          { opacity: 0, y: reduced ? 0 : 24, scale: reduced ? 1 : 0.985 },
           {
             opacity: 1,
             y: 0,
             scale: 1,
-            duration: reduced ? 0.15 : 0.7,
+            duration: reduced ? 0.15 : 0.85,
             ease: "power4.out",
           },
-          0.72,
+          0.12,
         )
         .fromTo(
           ".mood-trigger",
           { opacity: 0, y: reduced ? 0 : 16 },
           { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" },
-          0.94,
+          0.3,
         )
         .fromTo(
           ".silent-entry",
           { opacity: 0, y: reduced ? 0 : 9 },
           { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" },
-          1.12,
+          0.5,
         );
     }, root);
     return () => ctx.revert();
@@ -168,7 +168,7 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
         <video
           ref={film}
           className="intro-film"
-          src={imageIntro ? undefined : asset("assets/intro.mp4")}
+          src={imageIntro ? undefined : asset("assets/intro-short-v4.mp4")}
           style={{ visibility: imageIntro ? "hidden" : "visible" }}
           muted
           playsInline
@@ -180,15 +180,15 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
           onError={() => setImageIntro(true)}
           aria-label="Hardik Visuals introduction film"
         />
-        {imageIntro && !ready && (
+        {imageIntro && (
           <img
             className="intro-fallback"
-            src={asset("assets/intro-motion-v2.webp")}
+            src={asset("assets/intro-short-hq-v4.webp")}
             alt="Hardik Visuals introduction"
             onLoad={() => {
               clearTimeout(fallbackTimer.current);
-              // Same 6.6-second film as an image animation: no iOS video play overlay.
-              fallbackTimer.current = setTimeout(() => setReady(true), reduced ? 0 : 6600);
+              // Same shortened high-quality film as an image animation: no iOS video play overlay.
+              fallbackTimer.current = setTimeout(() => setReady(true), reduced ? 0 : 5667);
             }}
             onError={() => setReady(true)}
           />
@@ -203,13 +203,13 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
           <img
             className="intro-face"
             ref={face}
-            src={asset("assets/intro-face-frame.webp")}
+            src={asset("assets/intro-face-hq-v4.webp")}
             alt=""
           />
           <div className="intro-copy">
             <img
               className="intro-title-frame"
-              src={asset("assets/intro-handoff.webp")}
+              src={asset("assets/intro-handoff-hq-v4.webp")}
               alt=""
             />
             <h2 className="sr-only">creative director & visual storyteller</h2>
@@ -281,3 +281,4 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
     </section>
   );
 }
+

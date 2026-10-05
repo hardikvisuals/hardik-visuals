@@ -15,8 +15,11 @@ hardik-visuals/
   public/placeholders/video.mp4
   r2-cors.json
   README.md
+  src/about.css
+  src/aboutImageSizes.json
   src/App.jsx
   src/assets.js
+  src/components/About.jsx
   src/components/CloseButton.jsx
   src/components/Cursor.jsx
   src/components/Gallery.jsx
@@ -30,10 +33,15 @@ hardik-visuals/
   src/components/WorkIndex.jsx
   src/data.js
   src/main.jsx
+  src/motion/aboutMotion.js
+  src/motion/aboutRipple.js
   src/motion/audio.js
   src/motion/createSpiral.js
   src/motion/MotionContext.jsx
   src/polish.css
+  src/Router.jsx
+  src/signature.json
   src/style.css
   TREE.txt
+  UPDATE-MOBILE.md
   vite.config.js

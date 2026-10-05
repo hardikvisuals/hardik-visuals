@@ -20,6 +20,7 @@ const MascotArt = forwardRef(function MascotArt(_, ref) {
   }
 
   function play() {
+    if (take) return;
     if (!bag.current.length) {
       bag.current = [0, 1, 2, 3];
       for (let i = 3; i > 0; i--) {
@@ -47,13 +48,14 @@ const MascotArt = forwardRef(function MascotArt(_, ref) {
 
   return (
     <span className="mascot-art" data-expression={take ? expressions[take.index] : "start"}>
-      <img className="mascot-start" src={asset("assets/mascot/start.webp")} alt=""
-        style={{ opacity: ready ? 0 : 1 }} />
+      <img className="mascot-start" src={asset("assets/mascot/start-hq-v6.webp")} alt=""
+        style={{ opacity: 1 }} />
       {take && (
         <img key={take.id} className="mascot-fallback"
-          src={asset(`assets/mascot/${expressions[take.index]}.webp`)} alt=""
+          src={asset(`assets/mascot/${expressions[take.index]}-hq-v6.webp`)} alt=""
           style={{ opacity: ready ? 1 : 0 }}
-          onLoad={() => {
+          onLoad={async (event) => {
+            await event.currentTarget.decode().catch(() => {});
             if (sequence.current !== take.id) return;
             // Animated WebP preserves alpha without a hardware video decoder.
             // Reveal only after load; ignore callbacks from interrupted takes.

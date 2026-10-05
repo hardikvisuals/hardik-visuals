@@ -75,7 +75,7 @@ Save and Deploy. Future pushes rebuild the site. This package is prepared for de
 - `src/motion/createSpiral.js`: `SPIRAL_CONFIG` at the top controls bend, full turns, depth blur, radius, tile size, saturation, inertia and video budget.
 - `src/assets.js`: the single public media base URL and placeholder resolver.
 - `src/data.js`: existing projects and soundtrack paths.
-- `src/components/Menu.jsx`, `src/polish.css`: larger contact links and highlighted Instagram.
+- `src/components/Menu.jsx`, `src/polish.css`: contact links, availability and understated Instagram.
 - `TREE.txt`: complete included file tree. `CHANGES.md`: files changed in this revision.
 
 Official setup references: [Cloudflare Pages / Vite](https://developers.cloudflare.com/pages/framework-guides/deploy-a-vite3-project/) · [R2 CORS](https://developers.cloudflare.com/r2/buckets/cors/).
