@@ -42,7 +42,7 @@ export const SPIRAL_CONFIG = {
   hoverScale: 0.04,
   hoverResponse: 10,
   videoBudget: 3,
-  mobileVideoBudget: 2,
+  mobileVideoBudget: 1,
   mediaInterval: 220,
 };
 const C = SPIRAL_CONFIG;
@@ -293,6 +293,7 @@ export function createSpiral(
       texture,
       video,
       requested: false,
+      autoplayBlocked: false,
       variation: {
         size: THREE.MathUtils.lerp(...C.tileSizeRange, seeded(i, 1)),
         x: (seeded(i, 2) - 0.5) * 2 * C.jitter.x,
@@ -430,6 +431,11 @@ export function createSpiral(
   function pauseVideos() {
     list.forEach((item) => {
       item.video.pause();
+      // pause() alone can keep downloading; release previews while a film is open.
+      if (item.video.getAttribute("src")) {
+        item.video.removeAttribute("src");
+        item.video.load();
+      }
       item.requested = false;
       item.uniforms.uMap.value = item.poster?.image ? item.poster : placeholder;
       item.uniforms.uIsVideo.value = 0;
@@ -574,12 +580,13 @@ export function createSpiral(
       );
       activeCount = chosen.size;
       list.forEach((item) => {
-        if (chosen.has(item.i) && !item.requested) {
+        if (chosen.has(item.i) && !item.requested && !item.autoplayBlocked) {
           item.requested = true;
           if (!item.video.getAttribute("src"))
             item.video.src = item.project.preview;
-          item.video.play().catch(() => {
+          item.video.play().catch((error) => {
             item.requested = false;
+            if (error.name === "NotAllowedError") item.autoplayBlocked = true;
           });
         } else if (!chosen.has(item.i) && item.requested) {
           item.video.pause();

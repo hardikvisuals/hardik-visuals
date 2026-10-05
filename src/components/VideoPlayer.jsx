@@ -7,6 +7,12 @@ export default function VideoPlayer({ project, muted, onClose, reduced }) {
     video = useRef(null),
     panel = useRef(null);
   const [error, setError] = useState(false);
+  const [source, setSource] = useState(() => {
+    const connection = navigator.connection;
+    const compact = matchMedia("(max-width: 900px), (pointer: coarse)").matches ||
+      connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType || "");
+    return compact && project.mobileVideo ? project.mobileVideo : project.video;
+  });
   useEffect(() => {
     const previous = document.activeElement;
     dialog.current.showModal();
@@ -66,20 +72,24 @@ export default function VideoPlayer({ project, muted, onClose, reduced }) {
         </div>
         <video
           ref={video}
-          src={project.video}
+          src={source}
           poster={project.poster}
           autoPlay
           muted={muted}
           playsInline
           controls
-          preload="metadata"
-          onError={() => setError(true)}
+          preload="auto"
+          onError={() => {
+            // Keep working if an older media bucket has not received the mobile files yet.
+            if (source !== project.video) setSource(project.video);
+            else setError(true);
+          }}
         />
         {error && (
           <p className="video-error">
             This film couldn’t load.{" "}
             <a href={project.video} target="_blank" rel="noreferrer">
-              Open the original video ↗
+              Open the original video ↗︎
             </a>
           </p>
         )}

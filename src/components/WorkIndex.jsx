@@ -125,7 +125,7 @@ export default function WorkIndex({
             >
               <small>{String(i + 1).padStart(2, "0")}</small>
               <RollingText>{p.title}</RollingText>
-              <span className="work-line-arrow">↗</span>
+              <span className="work-line-arrow">↗︎</span>
             </button>
           </div>
         ))}

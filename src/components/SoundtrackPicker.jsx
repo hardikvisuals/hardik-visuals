@@ -86,7 +86,7 @@ export default function SoundtrackPicker({ selected, onSelect, onClose }) {
               <small>{String(i + 1).padStart(2, "0")}</small>
               <RollingText>{track.title}</RollingText>
               <span className="soundtrack-mark">
-                {i === selected ? "●" : "↗"}
+                {i === selected ? "●" : "↗︎"}
               </span>
             </button>
           ))}

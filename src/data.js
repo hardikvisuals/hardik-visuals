@@ -2,7 +2,7 @@ import { asset } from "./assets.js";
 
 export const projects = [
   ["Otherworldly", "Visual storytelling", "1st/OtherWordly stack.mp4"],
-  ["Deceived", "Valorant · 3D film", "deceived-revised.mp4"],
+  ["Deceived", "Valorant · 3D film", "deceived-v3.mp4"],
   ["Devyn Jato", "Creator storytelling", "3rd/Devyn Jato - Talking Head.mp4"],
   ["Thrive On", "Packaging · 3D visualization", "thrive-on.mp4"],
   ["FIFA 2026", "Title sequence", "5thh/FIFA 2026 Intro.mp4"],
@@ -23,12 +23,13 @@ export const projects = [
   title,
   category,
   poster: asset(
-    `assets/work/project-${i + 1}${i === 1 ? "-revised" : ""}.webp`,
+    `assets/work/project-${i + 1}${i === 1 ? "-v3" : ""}.webp`,
   ),
   preview: asset(
-    `assets/work/project-${i + 1}${i === 1 ? "-revised" : ""}-preview.mp4`,
+    `assets/work/project-${i + 1}${i === 1 ? "-v3" : ""}-preview.mp4`,
   ),
   video: asset(`portfolio/${file}`),
+  mobileVideo: asset(`portfolio/mobile/project-${i + 1}-v3.mp4`),
 }));
 
 export const tracks = [

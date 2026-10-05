@@ -473,15 +473,8 @@
   overflow-wrap: anywhere;
 }
 .contact-links .contact-instagram {
-  background: #c7eb9c;
-  border: 1px solid #a1bd7b;
-  border-radius: 12px;
-  padding: 18px 20px;
-  margin: 0 0 10px;
-  font-size: clamp(25px, 2.8vw, 32px);
-}
-.contact-instagram:before {
-  display: none;
+  font-size: clamp(18px, 1.8vw, 21px);
+  padding: 15px 0;
 }
 .menu-sheet[data-view="contact"] .menu-main {
   flex: 1 0 auto;
@@ -510,9 +503,6 @@
   }
   .menu-sheet[data-view="contact"] .menu-content h2 {
     font-size: 46px;
-  }
-  .contact-links .contact-instagram {
-    padding: 16px;
   }
   .menu-sheet[data-view="contact"] .menu-top {
     position: sticky;

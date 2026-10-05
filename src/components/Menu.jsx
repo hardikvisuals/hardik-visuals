@@ -149,7 +149,7 @@ export default function Menu({ onClose, onWorks, reduced }) {
                 >
                   <small className="menu-number">{num}</small>
                   <RollingText>{label}</RollingText>
-                  <span className="menu-orb">↗</span>
+                  <span className="menu-orb">↗︎</span>
                 </button>
               ))}
             </nav>
@@ -179,7 +179,7 @@ export default function Menu({ onClose, onWorks, reduced }) {
                     <RollingText>
                       Let’s make something worth watching
                     </RollingText>{" "}
-                    ↗
+                    ↗︎
                   </button>
                 </>
               ) : (
@@ -191,19 +191,9 @@ export default function Menu({ onClose, onWorks, reduced }) {
                     on your mind?
                   </h2>
                   <div className="contact-links">
-                    <a
-                      className="contact-instagram"
-                      href="https://www.instagram.com/hardikk.singhh/"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <RollingText>Instagram</RollingText>
-                      <span>↗</span>
-                      <small>@hardikk.singhh</small>
-                    </a>
                     <a href="mailto:hardikvisuals.work@gmail.com">
                       <RollingText>Send an email</RollingText>
-                      <span>↗</span>
+                      <span>↗︎</span>
                       <small>hardikvisuals.work@gmail.com</small>
                     </a>
                     <a
@@ -212,7 +202,7 @@ export default function Menu({ onClose, onWorks, reduced }) {
                       rel="noreferrer"
                     >
                       <RollingText>WhatsApp</RollingText>
-                      <span>↗</span>
+                      <span>↗︎</span>
                       <small>+91 70423 57394</small>
                     </a>
                     <a
@@ -221,8 +211,18 @@ export default function Menu({ onClose, onWorks, reduced }) {
                       rel="noreferrer"
                     >
                       <RollingText>Book a conversation</RollingText>
-                      <span>↗</span>
+                      <span>↗︎</span>
                       <small>Find a time on Calendly</small>
+                    </a>
+                    <a
+                      className="contact-instagram"
+                      href="https://www.instagram.com/hardikk.singhh/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <RollingText>More of me &amp; my work</RollingText>
+                      <span>↗︎</span>
+                      <small>Instagram · @hardikk.singhh</small>
                     </a>
                   </div>
                 </>
@@ -232,14 +232,14 @@ export default function Menu({ onClose, onWorks, reduced }) {
         </div>
         <div className="menu-bottom">
           <a href="mailto:hardikvisuals.work@gmail.com">
-            <RollingText>hardikvisuals.work@gmail.com</RollingText> ↗
+            <RollingText>hardikvisuals.work@gmail.com</RollingText> ↗︎
           </a>
           <a
             href="https://www.instagram.com/hardikk.singhh/"
             target="_blank"
             rel="noreferrer"
           >
-            <RollingText>Instagram</RollingText> ↗
+            <RollingText>Instagram</RollingText> ↗︎
           </a>
           <span>BASED IN INDIA. CREATING EVERYWHERE.</span>
         </div>

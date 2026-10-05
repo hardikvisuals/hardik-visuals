@@ -238,7 +238,7 @@ export default function App() {
               </span>
               <strong>{projects[hovered].title}</strong>
               <span>{projects[hovered].category}</span>
-              <span className="caption-play">↗</span>
+              <span className="caption-play">↗︎</span>
             </>
           )}
         </div>
@@ -254,7 +254,7 @@ export default function App() {
               <span className="identity-portrait">
                 <img src={asset("assets/portrait.jpg")} alt="Hardik" width="94" height="94" />
               </span>
-              <i>↗</i>
+              <i>↗︎</i>
             </span>
             <span className="identity-copy">
               <span className="eyebrow">A LITTLE ABOUT ME</span>

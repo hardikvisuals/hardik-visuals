@@ -13,16 +13,22 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
     live = useRef(null),
     face = useRef(null),
     glow = useRef(null),
+    fallbackTimer = useRef(null),
     exitTimeline = useRef(null);
   const { setMotion } = useMotion();
   const [ready, setReady] = useState(false),
-    [blocked, setBlocked] = useState(false),
+    [imageIntro, setImageIntro] = useState(() =>
+      matchMedia("(max-width: 900px), (pointer: coarse)").matches,
+    ),
     [leaving, setLeaving] = useState(false),
     [picker, setPicker] = useState(false);
   useEffect(() => {
-    film.current.play().catch(() => setBlocked(true));
-    return () => exitTimeline.current?.kill();
-  }, []);
+    if (!imageIntro) film.current.play().catch(() => setImageIntro(true));
+    return () => {
+      clearTimeout(fallbackTimer.current);
+      exitTimeline.current?.kill();
+    };
+  }, [imageIntro]);
   useLayoutEffect(() => {
     if (!ready) return;
     // The live layers use the exact final film frame, at identical coordinates.
@@ -162,30 +168,30 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
         <video
           ref={film}
           className="intro-film"
-          src={asset("assets/intro.mp4")}
+          src={imageIntro ? undefined : asset("assets/intro.mp4")}
+          style={{ visibility: imageIntro ? "hidden" : "visible" }}
           muted
           playsInline
           autoPlay
           preload="auto"
           onEnded={() => {
             setReady(true);
-            setBlocked(false);
           }}
-          onError={() => setReady(true)}
+          onError={() => setImageIntro(true)}
           aria-label="Hardik Visuals introduction film"
         />
-        {blocked && !ready && (
-          <button
-            className="pill film-start"
-            onClick={() =>
-              film.current
-                .play()
-                .then(() => setBlocked(false))
-                .catch(() => {})
-            }
-          >
-            Play introduction <span>↗</span>
-          </button>
+        {imageIntro && !ready && (
+          <img
+            className="intro-fallback"
+            src={asset("assets/intro-motion-v2.webp")}
+            alt="Hardik Visuals introduction"
+            onLoad={() => {
+              clearTimeout(fallbackTimer.current);
+              // Same 6.6-second film as an image animation: no iOS video play overlay.
+              fallbackTimer.current = setTimeout(() => setReady(true), reduced ? 0 : 6600);
+            }}
+            onError={() => setReady(true)}
+          />
         )}
         <div
           className="intro-live"
@@ -221,7 +227,7 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
                 <RollingText>enter with sound</RollingText>
                 <span className="entry-button-orb">
                   <span className="button-dot" />
-                  <span className="entry-arrow">↗</span>
+                  <span className="entry-arrow">↗︎</span>
                 </span>
               </Magnetic>
             </div>
@@ -247,7 +253,7 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
           aria-pressed={!reduced}
         >
           {reduced ? "reduced motion" : "full motion"}
-          <span>↗</span>
+          <span>↗︎</span>
         </button>
         {ready ? (
           <button
@@ -256,7 +262,7 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
             onClick={() => enter(false)}
           >
             <RollingText>enter without sound</RollingText>
-            <span>↗</span>
+            <span>↗︎</span>
           </button>
         ) : (
           <span className="film-progress" aria-label="Introduction playing">
