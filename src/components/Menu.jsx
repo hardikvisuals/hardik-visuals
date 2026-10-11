@@ -3,18 +3,34 @@ import gsap from "gsap";
 import RollingText from "./RollingText.jsx";
 import CloseButton from "./CloseButton.jsx";
 
-export default function Menu({ onClose, onWorks, onAbout, initialView = "menu", reduced }) {
+import { prepareAbout as loadAbout } from "../prepareAbout.js";
+
+export default function Menu({
+  onClose,
+  onWorks,
+  onAbout,
+  initialView = "menu",
+  reduced,
+}) {
   const dialog = useRef(null),
     panel = useRef(null),
     body = useRef(null),
     busy = useRef(false),
-    closeTween = useRef(null);
+    closeTween = useRef(null),
+    openTween = useRef(null),
+    viewTween = useRef(null),
+    closing = useRef(false),
+    request = useRef(0),
+    mounted = useRef(false);
+  const [loadError, setLoadError] = useState(false);
   const [view, setView] = useState(initialView);
   useLayoutEffect(() => {
+    mounted.current = true;
+    closing.current = false;
     const previous = document.activeElement;
     dialog.current.showModal();
     const ctx = gsap.context(() => {
-      gsap
+      openTween.current = gsap
         .timeline()
         .fromTo(
           panel.current,
@@ -55,13 +71,17 @@ export default function Menu({ onClose, onWorks, onAbout, initialView = "menu", 
         );
     }, panel);
     return () => {
+      mounted.current = false;
+      request.current++;
+      viewTween.current?.kill();
       ctx.revert();
+      openTween.current?.kill();
       closeTween.current?.kill();
-      previous?.focus();
+      if (previous?.isConnected) previous.focus();
     };
   }, [reduced]);
   useLayoutEffect(() => {
-    busy.current = false;
+    if (!closing.current) busy.current = false;
     const ctx = gsap.context(() => {
       gsap.set(body.current, { opacity: 1, y: 0, rotateX: 0 });
       gsap.fromTo(
@@ -81,9 +101,11 @@ export default function Menu({ onClose, onWorks, onAbout, initialView = "menu", 
     return () => ctx.revert();
   }, [view, reduced]);
   function navigate(next) {
-    if (busy.current) return;
+    if (busy.current || closing.current) return;
+    request.current++;
     busy.current = true;
-    gsap.to(body.current, {
+    viewTween.current = gsap.to(body.current, {
+      overwrite: true,
       opacity: 0,
       y: reduced ? 0 : -24,
       rotateX: 0,
@@ -92,11 +114,19 @@ export default function Menu({ onClose, onWorks, onAbout, initialView = "menu", 
       onComplete: () => setView(next),
     });
   }
-  function close(works = false) {
-    if (busy.current) return;
+  function close(works = false, afterClose) {
+    if (closing.current || !mounted.current) return;
+    closing.current = true;
+    request.current++;
     busy.current = true;
+    viewTween.current?.kill();
+    openTween.current?.kill();
+    gsap.killTweensOf(body.current);
     closeTween.current = gsap
-      .timeline({ onComplete: () => (works ? onWorks() : onClose()) })
+      .timeline({
+        onComplete: () =>
+          afterClose ? afterClose() : works ? onWorks() : onClose(),
+      })
       .to(
         body.current,
         { opacity: 0, y: reduced ? 0 : 20, duration: 0.2, ease: "power2.in" },
@@ -127,7 +157,12 @@ export default function Menu({ onClose, onWorks, onAbout, initialView = "menu", 
         if (e.target === dialog.current) close();
       }}
     >
-      <div className="menu-sheet" data-view={view} data-motion={reduced ? "reduced" : "full"} ref={panel}>
+      <div
+        className="menu-sheet"
+        data-view={view}
+        data-motion={reduced ? "reduced" : "full"}
+        ref={panel}
+      >
         <div className="menu-top">
           <span>HARDIK VISUALS®</span>
           <CloseButton onClick={() => close()} label="Close menu" />
@@ -143,12 +178,44 @@ export default function Menu({ onClose, onWorks, onAbout, initialView = "menu", 
                 <button
                   className="menu-link"
                   key={label}
-                  onClick={() =>
-                    label === "works" ? close(true) : label === "about" ? onAbout() : navigate(label)
-                  }
+                  onPointerEnter={() => {
+                    if (label === "about") void loadAbout().catch(() => {});
+                  }}
+                  onFocus={() => {
+                    if (label === "about") void loadAbout().catch(() => {});
+                  }}
+                  onClick={() => {
+                    if (label === "works") close(true);
+                    else if (label === "about") {
+                      if (busy.current || closing.current) return;
+                      busy.current = true;
+                      setLoadError(false);
+                      const id = ++request.current;
+                      void loadAbout()
+                        .then(() => {
+                          if (mounted.current && id === request.current)
+                            close(false, onAbout);
+                        })
+                        .catch(() => {
+                          if (mounted.current && id === request.current) {
+                            busy.current = false;
+                            setLoadError(true);
+                          }
+                        });
+                    } else navigate(label);
+                  }}
                 >
                   <small className="menu-number">{num}</small>
-                  <span className="menu-label-wrap"><RollingText>{label === "about" ? "about me" : label}</RollingText>{label === "about" && <small className="menu-about-hint">Get to know the person behind the work.</small>}</span>
+                  <span className="menu-label-wrap">
+                    <RollingText>
+                      {label === "about" ? "about me" : label}
+                    </RollingText>
+                    {label === "about" && (
+                      <small className="menu-about-hint">
+                        Get to know the person behind the work.
+                      </small>
+                    )}
+                  </span>
                   <span className="menu-orb">↗︎</span>
                 </button>
               ))}
@@ -230,6 +297,9 @@ export default function Menu({ onClose, onWorks, onAbout, initialView = "menu", 
             </div>
           )}
         </div>
+        {loadError && (
+          <p role="status">Couldn’t load About. Tap About Me to try again.</p>
+        )}
         <div className="menu-bottom">
           <a href="mailto:hardikvisuals.work@gmail.com">
             <RollingText>hardikvisuals.work@gmail.com</RollingText> ↗︎

@@ -1,81 +1,45 @@
-# Hardik Visuals
+# Hardik Visuals — optimized release v14
 
-React + Vite + Three.js; static site, no backend. Node **24.18.1** (pinned in `.node-version`).
+This is the website source for the existing Cloudflare Pages + R2 deployment.
 
-Start with [DEPLOY-CLOUDFLARE.md](DEPLOY-CLOUDFLARE.md) for the complete deployment walkthrough, including a temporary launch without a domain or GitHub.
+## Upload to your existing GitHub repository
 
-## Local run
+1. Extract `hardik-visuals-v14-final.zip`.
+2. Open the extracted `hardik-visuals` folder. Upload its **contents** into your existing repository root, replacing matching files. `package.json`, `src`, `public`, and `scripts` must be at the root — do not add another nested `hardik-visuals` folder.
+3. Commit the upload. Keep your existing Cloudflare Pages GitHub connection.
+4. Build command: `npm run build`. Output directory: `dist`. Node: version 24 (the supplied `.node-version` also specifies it).
+5. Keep your existing `VITE_ASSETS_BASE_URL` public R2 URL. The source also defaults to your current public media URL if that setting is absent. Do not set it to `/` for production.
+6. Wait for the deployment to succeed, then open the live URL on your phone. Close an old tab or refresh to get the new build.
 
-From the extracted `hardik-visuals` folder:
+**No new R2 upload is required for v14.** The optimized intro, animated mascot, About hero portrait, and sharing image are included under `public/optimized`. Your existing portfolio videos, audio, and other About photos continue to use R2. Keep existing media in R2.
 
-```powershell
+## Local development
+
+Install Node 24, then run:
+
+```sh
 npm ci
 npm run dev
 ```
 
-Open http://127.0.0.1:4174/ (or append `?motion=full` to explicitly enable full motion).
+The default public R2 URL loads the existing media. For a full offline media copy, copy your original `assets` and `portfolio` folders into `public`, and use `VITE_ASSETS_BASE_URL=/` in an uncommitted `.env.local`.
 
-```powershell
-npm run build
+```sh
+npm run check
 npm run preview
 ```
 
-Build output: **dist**. Stop the dev server with Ctrl+C before starting preview; both use port 4174.
+The build creates `dist/about.html` with About-specific metadata and `dist/404.html` for Cloudflare's real 404 responses. `public/_redirects` deliberately has no catch-all rewrite. Upload that file with this release so an older catch-all does not override 404 handling.
 
-## Media / R2
+## Mobile test after deployment
 
-1. Blank `VITE_ASSETS_BASE_URL` uses the tiny bundled placeholders; it does not include the real films.
-2. Extract the separate `hardik-visuals-r2-media.zip` **outside this repository**. Upload its `assets` and `portfolio` contents to your public R2 bucket, preserving paths such as `assets/intro.mp4` and `portfolio/thrive-on.mp4`. Do not upload the ZIP as one object.
-3. Connect a public R2 custom domain; use its public HTTPS address, not an S3 API endpoint. In the bucket's Settings → CORS Policy → JSON, paste `r2-cors.json`. It permits public GET/HEAD media access, including browser video textures.
-4. Copy `.env.example` to `.env.local`, set the public origin below, then restart Vite. Set the same variable in Cloudflare Pages **Production and Preview** environments before building; changing it requires a rebuild.
+- Watch the intro, then enter with sound and without sound. A skip option appears after two seconds; the full film remains available.
+- Tap the mascot once and hold it. The hint should emerge below it and disappear after interaction.
+- Open/close the menu several times; visit About from both the menu and profile button.
+- Play a project, use its native video controls, then close it.
+- Scroll About to the end; rotate the phone/tablet and try the navigation links.
+- Try reduced motion and the browser Back button.
 
-```dotenv
-VITE_ASSETS_BASE_URL=https://media.your-domain.com
-```
+## Release notes
 
-Use your own domain. No key/token belongs in a `VITE_` variable. `.env.local` stays out of Git.
-For an entirely local real-media preview, copy the extracted `assets` and `portfolio` folders into `public`, then use `VITE_ASSETS_BASE_URL=/`; both folders are gitignored except the small favicon.
-`MEDIA-MANIFEST.json` lists every required R2 object, size, MIME type and checksum. Preserve the supplied MIME types when uploading.
-
-## GitHub — first push
-
-Install Git, then create an **empty** GitHub repository named `hardik-visuals` (do not initialize it with README/license/gitignore). Open PowerShell in the extracted project folder; replace the example name, email and GitHub username below.
-
-```powershell
-git init
-git config user.name "Your Name"
-git config user.email "you@example.com"
-git add .
-git commit -m "Build Hardik Visuals portfolio"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/hardik-visuals.git
-git push -u origin main
-```
-
-Complete GitHub sign-in if prompted. Do not place the separate media ZIP in this repository.
-
-## Cloudflare Pages — exact settings
-
-Workers & Pages → Create application → Pages → Import an existing Git repository → select `hardik-visuals`.
-
-| Setting | Value |
-| --- | --- |
-| Framework preset | **None** (manual Vite settings) |
-| Production branch | `main` |
-| Root directory | Leave blank (repository root) |
-| Build command | `npm run build` |
-| Build output directory | `dist` |
-| Environment variable | `NODE_VERSION=24.18.1` |
-| Environment variable | `VITE_ASSETS_BASE_URL=https://media.your-domain.com` |
-
-Save and Deploy. Future pushes rebuild the site. This package is prepared for deployment; it has not been uploaded to your GitHub or Cloudflare account.
-
-## Tune / edit
-
-- `src/motion/createSpiral.js`: `SPIRAL_CONFIG` at the top controls bend, full turns, depth blur, radius, tile size, saturation, inertia and video budget.
-- `src/assets.js`: the single public media base URL and placeholder resolver.
-- `src/data.js`: existing projects and soundtrack paths.
-- `src/components/Menu.jsx`, `src/polish.css`: contact links, availability and understated Instagram.
-- `TREE.txt`: complete included file tree. `CHANGES.md`: files changed in this revision.
-
-Official setup references: [Cloudflare Pages / Vite](https://developers.cloudflare.com/pages/framework-guides/deploy-a-vite3-project/) · [R2 CORS](https://developers.cloudflare.com/r2/buckets/cors/).
+See `CHANGES.md` and `QA-REPORT.md` for the changes, measured asset reductions, checks performed, and the remaining real-device verification scope.

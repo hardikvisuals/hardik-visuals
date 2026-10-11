@@ -23,24 +23,35 @@ import { projects, tracks, facts } from "./data.js";
 
 const Gallery = lazy(() => import("./components/Gallery.jsx"));
 
-export default function App({ initialEntered = false, initialMenu = false, onAbout }) {
+export default function App({
+  initialEntered = false,
+  initialMenu = false,
+  onAbout,
+  audio,
+  sound,
+  setSound,
+}) {
   const { reduced } = useMotion();
+  const [introDone, setIntroDone] = useState(initialEntered);
   const [entered, setEntered] = useState(initialEntered),
-    [mode, setMode] = useState("spiral"),
-    [sound, setSound] = useState(false);
-  const [selectedTrack, setSelectedTrack] = useState(() => Math.floor(Math.random() * tracks.length)),
+    [mode, setMode] = useState("spiral");
+  const [selectedTrack, setSelectedTrack] = useState(() =>
+      audio.current?.selectedTrack ?? Math.floor(Math.random() * tracks.length),
+    ),
     [trackOpen, setTrackOpen] = useState(false),
     [menu, setMenu] = useState(initialMenu);
   const [playing, setPlaying] = useState(!reduced),
     [hovered, setHovered] = useState(-1),
     [selected, setSelected] = useState(null);
+  const [mascotUsed, setMascotUsed] = useState(false);
   const [fact, setFact] = useState(0),
     [holding, setHolding] = useState(false);
-  const explicitTrack = useRef(false), profileTimer = useRef(null), profileHeld = useRef(false);
+  const explicitTrack = useRef(false),
+    profileTimer = useRef(null),
+    profileHeld = useRef(false);
   const [menuView, setMenuView] = useState(initialMenu ? "contact" : "menu");
   const [available, setAvailable] = useState(false);
-  const audio = useRef(null),
-    gallery = useRef(null),
+  const gallery = useRef(null),
     header = useRef(null),
     footer = useRef(null),
     mascot = useRef(null),
@@ -48,9 +59,9 @@ export default function App({ initialEntered = false, initialMenu = false, onAbo
   const holdTimer = useRef(null),
     didHold = useRef(false);
   useEffect(() => {
-    audio.current = createAudio();
+    audio.current ||= createAudio();
     return () => {
-      audio.current.dispose();
+      audio.current.suspend(false);
       clearTimeout(holdTimer.current);
       clearTimeout(profileTimer.current);
     };
@@ -89,10 +100,18 @@ export default function App({ initialEntered = false, initialMenu = false, onAbo
     setSelectedTrack(index);
     audio.current?.select(index);
   }
+  function openAbout() {
+    gallery.current?.depart();
+    onAbout();
+  }
   function hire() {
-    setAvailable(true); setMenuView("contact"); setMenu(true);
+    setAvailable(true);
+    setMenuView("contact");
+    setMenu(true);
   }
   function enter(withSound) {
+    // Start fetching the gallery during the existing intro exit, after the visitor chooses to enter.
+    void import("./components/Gallery.jsx").catch(() => {});
     if (withSound) randomTrack();
     setSound(withSound);
     audio.current.setEnabled(withSound);
@@ -136,6 +155,7 @@ export default function App({ initialEntered = false, initialMenu = false, onAbo
     setHolding(false);
   }
   function reactMascot() {
+    setMascotUsed(true);
     if (didHold.current) {
       didHold.current = false;
       return;
@@ -152,6 +172,7 @@ export default function App({ initialEntered = false, initialMenu = false, onAbo
           rotation: 0,
           duration: 0.7,
           ease: "elastic.out(1,.4)",
+          overwrite: true,
         },
       );
   }
@@ -160,7 +181,9 @@ export default function App({ initialEntered = false, initialMenu = false, onAbo
       <div
         className={`experience ${entered ? "entered" : ""}`}
         style={{
-          "--gallery-texture": `url("${asset("assets/graphite-texture.webp")}")`,
+          "--gallery-texture": entered
+            ? `url("${asset("assets/graphite-texture.webp")}")`
+            : "none",
         }}
         inert={!entered || undefined}
         aria-hidden={!entered || undefined}
@@ -173,24 +196,27 @@ export default function App({ initialEntered = false, initialMenu = false, onAbo
             Hardik Visuals — Creative director and visual storyteller. Selected
             work.
           </h1>
-          <Suspense fallback={null}>
-            <Gallery
-              ref={gallery}
-              entered={entered}
-              paused={menu || selected !== null}
-              recessed={menu}
-              playing={playing}
-              mode={mode}
-              reduced={reduced}
-              onHover={hover}
-              onSelect={open}
-            />
-          </Suspense>
+          {entered && (
+            <Suspense fallback={null}>
+              <Gallery
+                ref={gallery}
+                entered={entered}
+                paused={menu || selected !== null}
+                recessed={menu}
+                playing={playing}
+                mode={mode}
+                reduced={reduced}
+                onHover={hover}
+                onSelect={open}
+              />
+            </Suspense>
+          )}
         </main>
         <header className="site-header" ref={header}>
           <div className="brand">
             <button
               className={`mascot-button ${holding ? "holding" : ""}`}
+              data-discovered={mascotUsed}
               aria-label="Play a mascot expression. Hold to send the spiral spinning."
               onPointerDown={startHold}
               onPointerUp={releaseHold}
@@ -199,9 +225,12 @@ export default function App({ initialEntered = false, initialMenu = false, onAbo
               onClick={reactMascot}
             >
               <span className="mascot-images" ref={mascot}>
-                <MascotArt ref={mascotArt} />
+                <MascotArt ref={mascotArt} active={entered} reduced={reduced} />
               </span>
               <span className="mascot-tooltip">click me. hold me.</span>
+              <span className="mascot-hint" aria-hidden="true">
+                click me!
+              </span>
               <svg className="hold-ring" viewBox="0 0 80 80">
                 <circle cx="40" cy="40" r="36" />
               </svg>
@@ -235,18 +264,23 @@ export default function App({ initialEntered = false, initialMenu = false, onAbo
               <RollingText>list</RollingText>
             </button>
           </div>
-          <div className="header-actions"><button className="hire-pill" onClick={hire}><span className="availability-dot"/>hire me now</button>
-          <Magnetic
-            className="pill menu-button"
-            onClick={() => {
-              setMenuView("menu");
-              setMenu(true);
-              setTrackOpen(false);
-              audio.current.effect("click");
-            }}
-          >
-            <RollingText>menu</RollingText> <span className="button-dot" />
-          </Magnetic></div>
+          <div className="header-actions">
+            <button className="hire-pill" onClick={hire}>
+              <span className="availability-dot" />
+              hire me now
+            </button>
+            <Magnetic
+              className="pill menu-button"
+              onClick={() => {
+                setMenuView("menu");
+                setMenu(true);
+                setTrackOpen(false);
+                audio.current.effect("click");
+              }}
+            >
+              <RollingText>menu</RollingText> <span className="button-dot" />
+            </Magnetic>
+          </div>
         </header>
         <div className="gallery-caption" aria-live="polite">
           {hovered >= 0 && (
@@ -263,25 +297,39 @@ export default function App({ initialEntered = false, initialMenu = false, onAbo
         <footer className="site-footer" ref={footer}>
           <button
             className="identity"
-            onPointerDown={() => { profileHeld.current = false; profileTimer.current = setTimeout(() => {profileHeld.current = true;setAvailable(true);}, 600); }}
+            onPointerDown={() => {
+              profileHeld.current = false;
+              profileTimer.current = setTimeout(() => {
+                profileHeld.current = true;
+                setAvailable(true);
+              }, 600);
+            }}
             onPointerUp={() => clearTimeout(profileTimer.current)}
             onPointerCancel={() => clearTimeout(profileTimer.current)}
             onPointerLeave={() => clearTimeout(profileTimer.current)}
             onClick={() => {
-              if(profileHeld.current) return;
-              if(available) hire(); else onAbout();
+              if (profileHeld.current) return;
+              if (available) hire();
+              else openAbout();
             }}
           >
             <span className="identity-icon">
               <span className="identity-portrait">
-                <img src={asset("assets/portrait.jpg")} alt="Hardik" width="94" height="94" />
+                <img
+                  src={entered ? asset("assets/portrait.jpg") : undefined}
+                  alt="Hardik"
+                  width="94"
+                  height="94"
+                />
               </span>
               <i>↗︎</i>
             </span>
             <span className="identity-copy">
               <span className="eyebrow">A LITTLE ABOUT ME</span>
               <span key={fact} className="fact-text">
-                {available ? "Available now for work — hire me now" : facts[fact]}
+                {available
+                  ? "Available now for work — hire me now"
+                  : facts[fact]}
               </span>
             </span>
           </button>
@@ -369,15 +417,18 @@ export default function App({ initialEntered = false, initialMenu = false, onAbo
           />
         )}
       </div>
-      {!initialEntered && <Intro
-        onEnter={enter}
-        selectedTrack={selectedTrack}
-        onTrack={chooseTrack}
-        reduced={reduced}
-      />}
+      {!introDone && (
+        <Intro
+          onExited={() => setIntroDone(true)}
+          onEnter={enter}
+          selectedTrack={selectedTrack}
+          onTrack={chooseTrack}
+          reduced={reduced}
+        />
+      )}
       {menu && (
         <Menu
-          onAbout={onAbout}
+          onAbout={openAbout}
           initialView={menuView}
           onClose={() => setMenu(false)}
           onWorks={() => {

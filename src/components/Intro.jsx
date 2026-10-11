@@ -1,13 +1,18 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { asset } from "../assets.js";
 import Magnetic from "./Magnetic.jsx";
 import RollingText from "./RollingText.jsx";
 import SoundtrackPicker from "./SoundtrackPicker.jsx";
 import { useMotion } from "../motion/MotionContext.jsx";
 import { tracks } from "../data.js";
 
-export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
+export default function Intro({
+  onEnter,
+  onExited,
+  selectedTrack,
+  onTrack,
+  reduced,
+}) {
   const root = useRef(null),
     film = useRef(null),
     live = useRef(null),
@@ -17,18 +22,39 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
     exitTimeline = useRef(null);
   const { setMotion } = useMotion();
   const [ready, setReady] = useState(false),
-    [imageIntro, setImageIntro] = useState(() =>
-      matchMedia("(max-width: 900px), (pointer: coarse)").matches,
-    ),
+    [imageIntro, setImageIntro] = useState(false),
     [leaving, setLeaving] = useState(false),
     [picker, setPicker] = useState(false);
+  const [videoSource] = useState(() => {
+    const width = window.innerWidth;
+    const size =
+      navigator.connection?.saveData || width < 768
+        ? "mobile"
+        : width < 1200
+          ? "tablet"
+          : "desktop";
+    return `/optimized/intro-${size}-v10.mp4`;
+  });
+  const [canSkip, setCanSkip] = useState(false);
+  const showImage = reduced || imageIntro;
   useEffect(() => {
-    if (!imageIntro) film.current.play().catch(() => setImageIntro(true));
+    const skip = setTimeout(() => setCanSkip(true), 2000);
+    // A blocked autoplay or stalled network must never trap visitors.
+    const deadline = setTimeout(() => {
+      setImageIntro(true);
+      setReady(true);
+    }, 10000);
     return () => {
+      clearTimeout(skip);
+      clearTimeout(deadline);
       clearTimeout(fallbackTimer.current);
       exitTimeline.current?.kill();
     };
-  }, [imageIntro]);
+  }, []);
+  useEffect(() => {
+    if (showImage) film.current?.pause();
+    else film.current?.play().catch(() => setImageIntro(true));
+  }, [showImage]);
   useLayoutEffect(() => {
     if (!ready) return;
     // The live layers use the exact final film frame, at identical coordinates.
@@ -94,8 +120,10 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
       });
   }
   function enter(sound) {
-    if (!ready || leaving) return;
+    if ((!ready && !canSkip) || leaving) return;
     setLeaving(true);
+    film.current?.pause();
+    clearTimeout(fallbackTimer.current);
     onEnter(sound);
     gsap.killTweensOf(face.current);
     gsap.killTweensOf(glow.current);
@@ -118,7 +146,7 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
       },
       0,
     );
-    if (!reduced && destination)
+    if (!reduced && destination && source.width > 0)
       tl.to(
         face.current,
         {
@@ -147,6 +175,7 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
         ease: "power3.inOut",
         onComplete: () => {
           if (root.current) root.current.style.visibility = "hidden";
+          onExited?.();
         },
       },
       reduced ? 0.12 : 0.35,
@@ -168,8 +197,8 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
         <video
           ref={film}
           className="intro-film"
-          src={imageIntro ? undefined : asset("assets/intro-short-v4.mp4")}
-          style={{ visibility: imageIntro ? "hidden" : "visible" }}
+          src={showImage ? undefined : videoSource}
+          style={{ visibility: showImage ? "hidden" : "visible" }}
           muted
           playsInline
           autoPlay
@@ -180,15 +209,23 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
           onError={() => setImageIntro(true)}
           aria-label="Hardik Visuals introduction film"
         />
-        {imageIntro && (
+        {showImage && (
           <img
             className="intro-fallback"
-            src={asset("assets/intro-short-hq-v4.webp")}
+            src={
+              reduced || ready
+                ? "/optimized/intro-final-v10.webp"
+                : "/optimized/intro-fallback-v10.webp"
+            }
             alt="Hardik Visuals introduction"
             onLoad={() => {
               clearTimeout(fallbackTimer.current);
-              // Same shortened high-quality film as an image animation: no iOS video play overlay.
-              fallbackTimer.current = setTimeout(() => setReady(true), reduced ? 0 : 5667);
+              if (reduced || ready) {
+                setReady(true);
+                return;
+              }
+              // Preserve the full animated fallback when full motion is selected.
+              fallbackTimer.current = setTimeout(() => setReady(true), 5667);
             }}
             onError={() => setReady(true)}
           />
@@ -203,13 +240,13 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
           <img
             className="intro-face"
             ref={face}
-            src={asset("assets/intro-face-hq-v4.webp")}
+            src="/optimized/intro-face-v10.webp"
             alt=""
           />
           <div className="intro-copy">
             <img
               className="intro-title-frame"
-              src={asset("assets/intro-handoff-hq-v4.webp")}
+              src="/optimized/intro-final-v10.webp"
               alt=""
             />
             <h2 className="sr-only">creative director & visual storyteller</h2>
@@ -266,7 +303,13 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
           </button>
         ) : (
           <span className="film-progress" aria-label="Introduction playing">
-            <i />
+            {canSkip ? (
+              <button className="quiet-button" onClick={() => enter(false)}>
+                skip intro ↗
+              </button>
+            ) : (
+              <i />
+            )}
           </span>
         )}
         <span>BASED IN INDIA. CREATING EVERYWHERE.</span>
@@ -281,4 +324,3 @@ export default function Intro({ onEnter, selectedTrack, onTrack, reduced }) {
     </section>
   );
 }
-

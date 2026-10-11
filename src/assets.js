@@ -1,6 +1,6 @@
 // Public media origin only, never a token or secret. Set this before building.
-// Blank uses the tiny development placeholders bundled in the GitHub package.
-export const ASSETS_BASE_URL = (import.meta.env.VITE_ASSETS_BASE_URL || "")
+// The existing public R2 bucket is the default. Use / for a full local media copy.
+export const ASSETS_BASE_URL = (import.meta.env.VITE_ASSETS_BASE_URL || "https://pub-b03a7af5516b456ebe564219ef06e245.r2.dev/hardik-visuals-r2-media")
   .trim()
   .replace(/\/+$/, "");
 const localMedia = import.meta.env.VITE_ASSETS_BASE_URL?.trim() === "/";

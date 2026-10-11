@@ -33,6 +33,7 @@ export default function Cursor() {
       frame,
       visible = false;
     function move(event) {
+      if (event.pointerType === "touch") return;
       x = event.clientX;
       y = event.clientY;
       if (!visible) {
@@ -47,13 +48,18 @@ export default function Cursor() {
       ring.current.dataset.active = target ? "true" : "false";
       ring.current.dataset.video =
         event.target.tagName === "VIDEO" ? "true" : "false";
+      if (!frame) frame = requestAnimationFrame(tick);
     }
     function tick() {
       rx += (x - rx) * 0.38;
       ry += (y - ry) * 0.38;
       dot.current.style.transform = `translate3d(${x}px,${y}px,0)`;
       ring.current.style.transform = `translate3d(${rx}px,${ry}px,0)`;
-      frame = requestAnimationFrame(tick);
+      if (visible && (Math.abs(x - rx) > 0.25 || Math.abs(y - ry) > 0.25)) {
+        frame = requestAnimationFrame(tick);
+      } else {
+        frame = null;
+      }
     }
     function down() {
       ring.current.classList.add("pressed");
@@ -69,7 +75,6 @@ export default function Cursor() {
     window.addEventListener("pointerdown", down);
     window.addEventListener("pointerup", up);
     document.addEventListener("pointerleave", leave);
-    frame = requestAnimationFrame(tick);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("pointermove", move);

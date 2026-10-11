@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hardikvisuals.com/sitemap.xml

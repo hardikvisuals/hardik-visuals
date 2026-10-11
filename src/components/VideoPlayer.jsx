@@ -3,18 +3,26 @@ import gsap from "gsap";
 import CloseButton from "./CloseButton.jsx";
 
 export default function VideoPlayer({ project, muted, onClose, reduced }) {
+  const closing = useRef(false),
+    closeTween = useRef(null);
   const dialog = useRef(null),
     video = useRef(null),
     panel = useRef(null);
   const [error, setError] = useState(false);
-  const [source, setSource] = useState(project.video);
+  const [source, setSource] = useState(() =>
+    matchMedia("(max-width: 900px), (pointer: coarse)").matches
+      ? project.mobileVideo
+      : project.video,
+  );
   useEffect(() => {
     const previous = document.activeElement;
     dialog.current.showModal();
     video.current.volume = 0.8;
     video.current.play().catch(() => {});
     return () => {
-      if (previous instanceof HTMLElement) previous.focus();
+      closeTween.current?.kill();
+      if (previous instanceof HTMLElement && previous.isConnected)
+        previous.focus();
     };
   }, []);
   useLayoutEffect(() => {
@@ -30,8 +38,11 @@ export default function VideoPlayer({ project, muted, onClose, reduced }) {
     return () => ctx.revert();
   }, [reduced]);
   function close() {
+    if (closing.current) return;
+    closing.current = true;
     video.current.pause();
-    gsap.to(panel.current, {
+    closeTween.current = gsap.to(panel.current, {
+      overwrite: true,
       opacity: 0,
       y: reduced ? 0 : 30,
       scale: reduced ? 1 : 0.97,

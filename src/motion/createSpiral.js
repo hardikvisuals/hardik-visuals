@@ -75,6 +75,7 @@ uniform float uHover;
 uniform float uOpacity;
 uniform float uLight;
 uniform float uIsVideo;
+uniform float uAberration;
 uniform float uRadius;
 uniform float uBlur;
 uniform float uBackBlur;
@@ -83,6 +84,10 @@ uniform float uSaturation;
 uniform vec2 uTexel;
 vec4 sampleLinear(vec2 uv) {
   vec4 c = texture2D(uMap, clamp(uv, vec2(.001), vec2(.999)));
+  if (uAberration > .0001) {
+    c.r = texture2D(uMap, clamp(uv + vec2(uAberration,0.), vec2(.001), vec2(.999))).r;
+    c.b = texture2D(uMap, clamp(uv - vec2(uAberration,0.), vec2(.001), vec2(.999))).b;
+  }
   return uIsVideo > .5 ? sRGBTransferEOTF(c) : c;
 }
 void main() {
@@ -140,6 +145,7 @@ export function createSpiral(
     return {
       dispose() {},
       enter() {},
+      depart() {},
       setPaused() {},
       setPlaying() {},
       impulse() {},
@@ -178,7 +184,8 @@ export function createSpiral(
     1,
   );
   placeholder.needsUpdate = true;
-  const travel = { reveal: 0, burst: 0, recessed: 0, twist: 0 };
+  const travel = { reveal: 0, burst: 0, recessed: 0, twist: 0, depart: 0 };
+  let cameraDistance = C.cameraDistance;
   let target = 0,
     hovered = -1,
     entered = false,
@@ -191,7 +198,8 @@ export function createSpiral(
   let phase = 0,
     time = 0,
     last = performance.now(),
-    frame,
+    frame = 0,
+    awakeUntil = 0,
     mediaTick = 0;
   let pointerDirty = false,
     activeCount = 0,
@@ -199,6 +207,13 @@ export function createSpiral(
   let timings = [],
     lastTiming = performance.now();
   let ready = false;
+  function wake(milliseconds = 1200) {
+    awakeUntil = Math.max(awakeUntil, performance.now() + milliseconds);
+    if (!disposed && !document.hidden && !frame) {
+      last = performance.now();
+      frame = requestAnimationFrame(draw);
+    }
+  }
   const list = projects.map((project, i) => {
     const uniforms = {
       uMap: { value: placeholder },
@@ -210,6 +225,7 @@ export function createSpiral(
       uOpacity: { value: 0 },
       uLight: { value: 1 },
       uIsVideo: { value: 0 },
+      uAberration: { value: 0 },
       uRadius: { value: C.cornerRadius },
       uBlur: { value: 0 },
       uBackBlur: { value: C.backBlurPixels },
@@ -314,6 +330,7 @@ export function createSpiral(
           texture.dispose();
           return;
         }
+        wake();
         texture.colorSpace = THREE.SRGBColorSpace;
         if (!item.uniforms.uIsVideo.value) {
           item.uniforms.uMap.value = texture;
@@ -342,12 +359,17 @@ export function createSpiral(
   function resize() {
     const { width, height } = host.getBoundingClientRect();
     if (!width || !height) return;
-    mobile = width < 700;
-    videoBudget = mobile ? C.mobileVideoBudget : C.videoBudget;
+    mobile = width < 768;
+    videoBudget = mobile
+      ? C.mobileVideoBudget
+      : width < 1200
+        ? 2
+        : C.videoBudget;
     camera.aspect = width / height;
-    camera.position.z = mobile
+    cameraDistance = mobile
       ? Math.max(C.mobileCameraDistance, 4.5 / camera.aspect)
       : C.cameraDistance;
+    camera.position.z = cameraDistance;
     camera.updateProjectionMatrix();
     camera.updateMatrixWorld();
     frustum.setFromProjectionMatrix(
@@ -357,6 +379,7 @@ export function createSpiral(
       ),
     );
     renderer.setSize(width, height);
+    wake();
   }
   const observer = new ResizeObserver(resize);
   observer.observe(host);
@@ -367,6 +390,7 @@ export function createSpiral(
     host.dataset.hovering = i >= 0 ? "true" : "false";
     onHover(i);
     pointerDirty = true;
+    wake();
   }
   function locate(e) {
     const box = host.getBoundingClientRect();
@@ -375,6 +399,7 @@ export function createSpiral(
       (-(e.clientY - box.top) / box.height) * 2 + 1,
     );
     pointerDirty = true;
+    wake();
   }
   function move(e) {
     locate(e);
@@ -418,6 +443,7 @@ export function createSpiral(
   function wheel(e) {
     if (paused) return;
     e.preventDefault();
+    wake();
     target +=
       Math.max(-220, Math.min(220, e.deltaY * (e.deltaMode === 1 ? 16 : 1))) *
       C.wheelGain;
@@ -443,12 +469,18 @@ export function createSpiral(
   }
   function visibility() {
     last = performance.now();
-    if (document.hidden) pauseVideos();
+    if (document.hidden) {
+      pauseVideos();
+      cancelAnimationFrame(frame);
+      frame = 0;
+      host.dataset.rendering = "sleeping";
+    } else wake();
   }
   document.addEventListener("visibilitychange", visibility);
   function draw(now) {
-    if (disposed) return;
-    frame = requestAnimationFrame(draw);
+    frame = 0;
+    if (disposed || document.hidden) return;
+    host.dataset.rendering = "active";
     const elapsed = now - last;
     const dt = Math.min(elapsed / 1000, 0.045);
     last = now;
@@ -466,6 +498,16 @@ export function createSpiral(
         timings = [];
         lastTiming = now;
       }
+    }
+    if (travel.depart > 0) {
+      camera.position.z = cameraDistance - travel.depart * (mobile ? 0.8 : 1.7);
+      camera.updateMatrixWorld();
+      frustum.setFromProjectionMatrix(
+        projection.multiplyMatrices(
+          camera.projectionMatrix,
+          camera.matrixWorldInverse,
+        ),
+      );
     }
     time += dt;
     if (entered && !paused && playing && hovered < 0 && !dragStart)
@@ -535,6 +577,9 @@ export function createSpiral(
         (reduced ? 0 : Math.min(C.maxVelocityBend, speed * C.velocityBend)) +
         hover * C.hoverBend;
       item.uniforms.uTime.value = reduced ? 0 : time;
+      item.uniforms.uAberration.value = reduced
+        ? 0
+        : Math.sin(travel.depart * Math.PI) * 0.004;
       item.uniforms.uOpacity.value =
         travel.reveal * Math.min(1, (height / 2 - Math.abs(y)) / 0.6);
       item.uniforms.uLight.value = THREE.MathUtils.lerp(
@@ -590,6 +635,12 @@ export function createSpiral(
           });
         } else if (!chosen.has(item.i) && item.requested) {
           item.video.pause();
+          item.video.removeAttribute("src");
+          item.video.load();
+          item.uniforms.uMap.value = item.poster?.image
+            ? item.poster
+            : placeholder;
+          item.uniforms.uIsVideo.value = 0;
           item.requested = false;
         }
       });
@@ -605,15 +656,28 @@ export function createSpiral(
       pointerDirty = false;
     }
     renderer.render(scene, camera);
+    const moving = Math.abs(target - phase) > 0.0005;
+    if (
+      (entered && !paused && playing) ||
+      moving ||
+      now < awakeUntil ||
+      gsap.isTweening(travel)
+    ) {
+      if (!frame) frame = requestAnimationFrame(draw);
+    } else host.dataset.rendering = "sleeping";
   }
-  frame = requestAnimationFrame(draw);
+  wake();
   function contextLost(e) {
     e.preventDefault();
+    cancelAnimationFrame(frame);
+    frame = 0;
+    pauseVideos();
     onUnavailable();
   }
   renderer.domElement.addEventListener("webglcontextlost", contextLost);
   return {
     enter() {
+      wake(1600);
       entered = true;
       paused = false;
       gsap.to(travel, {
@@ -623,7 +687,18 @@ export function createSpiral(
         delay: reduced ? 0 : 0.15,
       });
     },
+    depart() {
+      wake(1600);
+      playing = false;
+      pauseVideos();
+      gsap.to(travel, {
+        depart: 1,
+        duration: reduced ? 0.12 : 0.85,
+        ease: "power2.inOut",
+      });
+    },
     setPaused(value) {
+      wake();
       paused = value;
       if (value) {
         setHover(-1);
@@ -631,10 +706,12 @@ export function createSpiral(
       }
     },
     setPlaying(value) {
+      wake();
       playing = value;
       if (!value) pauseVideos();
     },
     impulse() {
+      wake();
       target += 2;
       gsap.to(travel, {
         burst: 0.7,
@@ -645,6 +722,7 @@ export function createSpiral(
       });
     },
     setRecessed(value) {
+      wake();
       gsap.to(travel, {
         recessed: value ? 1 : 0,
         duration: reduced ? 0.15 : 0.85,
@@ -654,6 +732,7 @@ export function createSpiral(
     },
     unfurl() {
       if (reduced) return;
+      wake(1600);
       target += 0.85;
       gsap.fromTo(
         travel,
@@ -662,9 +741,11 @@ export function createSpiral(
       );
     },
     nudge(direction) {
+      wake();
       target += direction * C.pitch;
     },
     focus(index) {
+      wake();
       target = -index * C.pitch;
     },
     dispose() {

@@ -43,6 +43,7 @@ export function createAudio() {
   }
   document.addEventListener("visibilitychange", visibility);
   return {
+    get selectedTrack() { return chosen; },
     setEnabled(value) {
       enabled = value;
       if (value) play();
@@ -58,6 +59,7 @@ export function createAudio() {
       if (enabled) play();
     },
     suspend(value) {
+      if (suspended === value) return;
       suspended = value;
       if (value) {
         ++version;

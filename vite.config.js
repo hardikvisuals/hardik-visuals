@@ -3,6 +3,6 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  build: { chunkSizeWarningLimit: 650 },
+  build: { sourcemap: false, chunkSizeWarningLimit: 650 },
   server: { strictPort: true },
 });

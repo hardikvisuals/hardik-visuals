@@ -45,6 +45,7 @@ const Gallery = forwardRef(function Gallery(
     if (entered && mode === "spiral") scene.current?.unfurl();
   }, [mode]);
   useImperativeHandle(ref, () => ({
+    depart: () => scene.current?.depart(),
     impulse: () => scene.current?.impulse(),
     unfurl: () => scene.current?.unfurl(),
     nudge: (d) => scene.current?.nudge(d),

@@ -1,0 +1,83 @@
+[
+  {
+    "file": "intro-mobile-v10.mp4",
+    "bytes": 63406,
+    "width": 960,
+    "sourceBytes": 5534193
+  },
+  {
+    "file": "intro-tablet-v10.mp4",
+    "bytes": 97288,
+    "width": 1280,
+    "sourceBytes": 5534193
+  },
+  {
+    "file": "intro-desktop-v10.mp4",
+    "bytes": 194926,
+    "width": 1920,
+    "sourceBytes": 5534193
+  },
+  {
+    "file": "intro-fallback-v10.webp",
+    "bytes": 465562,
+    "width": 960,
+    "height": 540,
+    "frames": 170,
+    "durationMs": 5666,
+    "sourceBytes": 3797660
+  },
+  {
+    "file": "mascot-start-v10.webp",
+    "bytes": 9712,
+    "width": 256,
+    "height": 252,
+    "frames": 1,
+    "durationMs": 0,
+    "sourceBytes": 70902
+  },
+  {
+    "file": "mascot-idle-v10.webp",
+    "bytes": 697918,
+    "width": 192,
+    "height": 189,
+    "frames": 131,
+    "durationMs": 4366,
+    "sourceBytes": 3965648
+  },
+  {
+    "file": "mascot-sad-v10.webp",
+    "bytes": 711786,
+    "width": 192,
+    "height": 189,
+    "frames": 131,
+    "durationMs": 4366,
+    "sourceBytes": 4022026
+  },
+  {
+    "file": "mascot-smile-v10.webp",
+    "bytes": 727226,
+    "width": 192,
+    "height": 189,
+    "frames": 131,
+    "durationMs": 4366,
+    "sourceBytes": 4105834
+  },
+  {
+    "file": "mascot-wow-v10.webp",
+    "bytes": 688452,
+    "width": 192,
+    "height": 189,
+    "frames": 131,
+    "durationMs": 4366,
+    "sourceBytes": 3973426
+  },
+  {
+    "file": "intro-face-v10.webp",
+    "bytes": 14268,
+    "width": 256,
+    "height": 256,
+    "frames": 1,
+    "durationMs": 0,
+    "sourceBytes": 62564
+  }
+]

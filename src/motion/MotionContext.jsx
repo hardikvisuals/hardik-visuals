@@ -1,6 +1,7 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -8,8 +9,19 @@ import {
 
 const MotionContext = createContext({ reduced: false, setMotion: () => {} });
 export function MotionProvider({ children }) {
-  const explicit = useRef(new URLSearchParams(location.search).get("motion"));
-  const [reduced, setReduced] = useState(() => explicit.current === "reduced");
+  const requestedMotion = new URLSearchParams(location.search).get("motion");
+  const explicit = useRef(requestedMotion === "reduced" || requestedMotion === "full" ? requestedMotion : null);
+  const [reduced, setReduced] = useState(() =>
+    explicit.current ? explicit.current === "reduced" : matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+  useEffect(() => {
+    const preference = matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => {
+      if (!explicit.current) setReduced(preference.matches);
+    };
+    preference.addEventListener("change", update);
+    return () => preference.removeEventListener("change", update);
+  }, []);
   useLayoutEffect(() => {
     document.documentElement.dataset.motion = reduced ? "reduced" : "full";
   }, [reduced]);

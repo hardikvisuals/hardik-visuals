@@ -1,26 +1,42 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { asset } from "../assets.js";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
 const expressions = ["idle", "sad", "smile", "wow"];
 const EXPRESSION_DURATION = 4366;
-
-const MascotArt = forwardRef(function MascotArt(_, ref) {
+// Cache compressed bytes, not live animated image elements. Each take gets its
+// own object URL so an already-playing browser image cannot start halfway in.
+const cache = new Map();
+function prepare(index) {
+  if (!cache.has(index)) {
+    const promise = fetch(`/optimized/mascot-${expressions[index]}-v10.webp`)
+      .then((response) => {
+        if (!response.ok) throw new Error("Mascot unavailable");
+        return response.blob();
+      })
+      .catch((error) => {
+        cache.delete(index);
+        throw error;
+      });
+    cache.set(index, promise);
+  }
+  return cache.get(index);
+}
+const MascotArt = forwardRef(function MascotArt({ active, reduced }, ref) {
   const [take, setTake] = useState(null);
   const [ready, setReady] = useState(false);
-  const bag = useRef([]);
-  const last = useRef(-1);
-  const sequence = useRef(0);
-  const timer = useRef(null);
-
-  function finish(id) {
-    if (sequence.current !== id) return;
-    clearTimeout(timer.current);
-    setReady(false);
-    setTake(null);
-  }
-
-  function play() {
-    if (take) return;
+  const bag = useRef([]),
+    last = useRef(-1),
+    sequence = useRef(0);
+  const timer = useRef(null),
+    busy = useRef(false),
+    url = useRef(null),
+    alive = useRef(false);
+  function nextIndex() {
     if (!bag.current.length) {
       bag.current = [0, 1, 2, 3];
       for (let i = 3; i > 0; i--) {
@@ -30,40 +46,87 @@ const MascotArt = forwardRef(function MascotArt(_, ref) {
       if (bag.current[0] === last.current)
         [bag.current[0], bag.current[1]] = [bag.current[1], bag.current[0]];
     }
-    const index = bag.current.shift();
-    last.current = index;
-    const id = ++sequence.current;
-    clearTimeout(timer.current);
-    setReady(false);
-    setTake({ index, id });
-    // A stalled request must also return to the starting face.
-    timer.current = setTimeout(() => finish(id), 10000);
+    return bag.current[0];
   }
-
-  useImperativeHandle(ref, () => ({ play }));
-  useEffect(() => () => {
+  function warm() {
+    if (alive.current && active && !reduced)
+      void prepare(nextIndex()).catch(() => {});
+  }
+  function finish(id) {
+    if (!alive.current || sequence.current !== id) return;
     sequence.current++;
     clearTimeout(timer.current);
-  }, []);
-
+    busy.current = false;
+    setReady(false);
+    setTake(null);
+    if (url.current) URL.revokeObjectURL(url.current);
+    url.current = null;
+    warm();
+  }
+  async function play() {
+    if (!active || reduced || busy.current) return;
+    busy.current = true;
+    const id = ++sequence.current;
+    const index = nextIndex();
+    setReady(false);
+    timer.current = setTimeout(() => finish(id), 10000);
+    try {
+      const blob = await prepare(index);
+      if (!alive.current || sequence.current !== id) return;
+      bag.current.shift();
+      last.current = index;
+      url.current = URL.createObjectURL(blob);
+      setTake({ index, id, src: url.current });
+    } catch {
+      finish(id);
+    }
+  }
+  useImperativeHandle(ref, () => ({ play }));
+  useEffect(() => {
+    alive.current = true;
+    warm();
+    return () => {
+      alive.current = false;
+      sequence.current++;
+      busy.current = false;
+      clearTimeout(timer.current);
+      if (url.current) URL.revokeObjectURL(url.current);
+      url.current = null;
+      setTake(null);
+      setReady(false);
+    };
+  }, [active, reduced]);
   return (
-    <span className="mascot-art" data-expression={take ? expressions[take.index] : "start"}>
-      <img className="mascot-start" src={asset("assets/mascot/start-hq-v6.webp")} alt=""
-        style={{ opacity: 1 }} />
+    <span
+      className="mascot-art"
+      data-expression={take ? expressions[take.index] : "start"}
+    >
+      <img
+        className="mascot-start"
+        src="/optimized/mascot-start-v10.webp"
+        width="256"
+        height="252"
+        alt=""
+        style={{ opacity: 1 }}
+      />
       {take && (
-        <img key={take.id} className="mascot-fallback"
-          src={asset(`assets/mascot/${expressions[take.index]}-hq-v6.webp`)} alt=""
+        <img
+          key={take.id}
+          className="mascot-fallback"
+          src={take.src}
+          alt=""
           style={{ opacity: ready ? 1 : 0 }}
-          onLoad={async (event) => {
-            await event.currentTarget.decode().catch(() => {});
+          onLoad={() => {
             if (sequence.current !== take.id) return;
-            // Animated WebP preserves alpha without a hardware video decoder.
-            // Reveal only after load; ignore callbacks from interrupted takes.
             clearTimeout(timer.current);
             setReady(true);
-            timer.current = setTimeout(() => finish(take.id), EXPRESSION_DURATION);
+            timer.current = setTimeout(
+              () => finish(take.id),
+              EXPRESSION_DURATION,
+            );
           }}
-          onError={() => finish(take.id)} />
+          onError={() => finish(take.id)}
+        />
       )}
     </span>
   );
