@@ -602,7 +602,7 @@ export default function About({ onNavigate, sound, onToggleSound }) {
               <a href={teaching} target="_blank" rel="noreferrer">
                 HARDIK SAYS <Arrow />
               </a>
-              <a href="mailto:hardikvisuals.work@gmail.com">
+              <a href="mailto:hardik@hardikvisuals.com">
                 EMAIL ME <Arrow />
               </a>
             </nav>

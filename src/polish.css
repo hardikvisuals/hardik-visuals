@@ -1195,3 +1195,8 @@
 }
 
 [data-motion="reduced"].about-loader img, [data-motion="reduced"].about-loader span { animation: none; }
+
+/* Let the existing menu entrance own label transforms on touch screens. */
+@media (max-width: 900px), (hover: none), (pointer: coarse) {
+  .menu-sheet .menu-link { transition: none; }
+}

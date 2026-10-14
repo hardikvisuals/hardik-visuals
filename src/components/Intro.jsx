@@ -33,7 +33,9 @@ export default function Intro({
         : width < 1200
           ? "tablet"
           : "desktop";
-    return `/optimized/intro-${size}-v10.mp4`;
+    return size === "mobile"
+      ? "/optimized/intro-mobile-v15.mp4"
+      : `/optimized/intro-${size}-v10.mp4`;
   });
   const [canSkip, setCanSkip] = useState(false);
   const showImage = reduced || imageIntro;
