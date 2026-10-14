@@ -258,7 +258,7 @@ export default function Menu({
                     something great.
                   </h2>
                   <div className="contact-links">
-                    <a href="mailto:hardik@hardikvisuals.com">
+                    <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=hardik%40hardikvisuals.com" target="_blank" rel="noopener noreferrer">
                       <RollingText>Send an email</RollingText>
                       <span>↗︎</span>
                       <small>hardik@hardikvisuals.com</small>
@@ -301,7 +301,7 @@ export default function Menu({
           <p role="status">Couldn’t load About. Tap About Me to try again.</p>
         )}
         <div className="menu-bottom">
-          <a href="mailto:hardik@hardikvisuals.com">
+          <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=hardik%40hardikvisuals.com" target="_blank" rel="noopener noreferrer">
             <RollingText>hardik@hardikvisuals.com</RollingText> ↗︎
           </a>
           <a

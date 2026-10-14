@@ -1,17 +1,17 @@
-# Hardik Visuals — optimized release v15
+# Hardik Visuals — optimized release v16
 
 This is the website source for the existing Cloudflare Pages + R2 deployment.
 
 ## Upload to your existing GitHub repository
 
-1. Extract `hardik-visuals-v15-final.zip`.
+1. Extract `hardik-visuals-v16-final.zip`.
 2. Open the extracted `hardik-visuals` folder. Upload its **contents** into your existing repository root, replacing matching files. `package.json`, `src`, `public`, and `scripts` must be at the root — do not add another nested `hardik-visuals` folder.
 3. Commit the upload. Keep your existing Cloudflare Pages GitHub connection.
 4. Build command: `npm run build`. Output directory: `dist`. Node: version 24 (the supplied `.node-version` also specifies it).
 5. Keep your existing `VITE_ASSETS_BASE_URL` public R2 URL. The source also defaults to your current public media URL if that setting is absent. Do not set it to `/` for production.
 6. Wait for the deployment to succeed, then open the live URL on your phone. Close an old tab or refresh to get the new build.
 
-**No new R2 upload is required for v15.** The optimized intro, animated mascot, About hero portrait, and sharing image are included under `public/optimized`. Your existing portfolio videos, audio, and other About photos continue to use R2. Keep existing media in R2.
+**No new R2 upload is required for v16.** The optimized intro, animated mascot, About hero portrait, and sharing image are included under `public/optimized`. Your existing portfolio videos, audio, and other About photos continue to use R2. Keep existing media in R2.
 
 ## Local development
 
