@@ -12,6 +12,7 @@ export default function Menu({
   initialView = "menu",
   reduced,
 }) {
+  const flatMenu = matchMedia("(max-width: 767px), (pointer: coarse)").matches;
   const dialog = useRef(null),
     panel = useRef(null),
     body = useRef(null),
@@ -35,15 +36,15 @@ export default function Menu({
         .fromTo(
           panel.current,
           {
-            xPercent: reduced ? 0 : 110,
-            rotateY: reduced ? 0 : -12,
+            xPercent: reduced ? 0 : flatMenu ? 100 : 110,
+            rotateY: reduced || flatMenu ? 0 : -12,
             opacity: reduced ? 0 : 1,
           },
           {
             xPercent: 0,
             rotateY: 0,
             opacity: 1,
-            duration: reduced ? 0.18 : 0.85,
+            duration: reduced ? 0.12 : flatMenu ? 0.42 : 0.65,
             ease: "power4.out",
           },
           0,
@@ -67,7 +68,7 @@ export default function Menu({
             stagger: reduced ? 0 : 0.055,
             ease: "power3.out",
           },
-          0.5,
+          reduced ? 0 : flatMenu ? 0.12 : 0.32,
         );
     }, panel);
     return () => {
@@ -77,7 +78,7 @@ export default function Menu({
       ctx.revert();
       openTween.current?.kill();
       closeTween.current?.kill();
-      if (previous?.isConnected) previous.focus();
+      if (previous?.isConnected) previous.focus({ preventScroll: true });
     };
   }, [reduced]);
   useLayoutEffect(() => {
@@ -93,7 +94,7 @@ export default function Menu({
           rotateX: 0,
           duration: reduced ? 0.15 : 0.6,
           stagger: reduced ? 0 : 0.07,
-          delay: view === "menu" ? 0.2 : 0.06,
+          delay: reduced ? 0 : flatMenu ? 0.08 : view === "menu" ? 0.2 : 0.06,
           ease: "power4.out",
         },
       );
@@ -135,10 +136,10 @@ export default function Menu({
       .to(
         panel.current,
         {
-          xPercent: reduced ? 0 : 110,
-          rotateY: reduced ? 0 : -8,
+          xPercent: reduced ? 0 : flatMenu ? 100 : 110,
+          rotateY: reduced || flatMenu ? 0 : -8,
           opacity: reduced ? 0 : 1,
-          duration: reduced ? 0.2 : 0.55,
+          duration: reduced ? 0.12 : flatMenu ? 0.30 : 0.46,
           ease: "power3.inOut",
         },
         0.04,
@@ -164,7 +165,7 @@ export default function Menu({
         ref={panel}
       >
         <div className="menu-top">
-          <span>HARDIK VISUALS®</span>
+          <span>HARDIK VISUALS®</span><span className="nav-edition" aria-hidden="true">STUDIO INDEX</span>
           <CloseButton onClick={() => close()} label="Close menu" />
         </div>
         <div className="menu-main" ref={body}>

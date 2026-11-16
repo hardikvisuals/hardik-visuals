@@ -32,6 +32,14 @@ export const projects = [
   mobileVideo: asset(`portfolio/mobile/project-${i + 1}-v3.mp4`),
 }));
 
+// Insert after resolving the original numbered media so existing films keep their assets.
+projects.splice(4, 0, {
+  title: "Showreel", category: "Selected work",
+  poster: "/optimized/featured-v17.webp", preview: "/optimized/featured-preview-v17.mp4",
+  video: "/optimized/featured-film-v17.mp4", mobileVideo: "/optimized/featured-film-v17.mp4",
+});
+projects.forEach((project, index) => { project.id = index; });
+
 export const tracks = [
   ["Holding you, Holding me", "holding-you-holding-me.mp3"],
   ["About You — The 1975", "about-you.mp3"],

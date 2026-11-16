@@ -8,7 +8,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import signatureData from "../signature.json";
 import imageSizes from "../aboutImageSizes.json";
-import "../about-fonts.css";
+
 
 const media = (name) => asset(`assets/about-v5/${name}`);
 const instagram = "https://www.instagram.com/hardikk.singhh/";
@@ -476,6 +476,17 @@ export default function About({ onNavigate, sound, onToggleSound }) {
             <Photo name="back" caption="BUILT ONE SESSION AT A TIME" />
             <Photo name="run" caption="OUTSIDE / A LITTLE FURTHER." />
           </div>
+        </section>
+        <section className="studio-process" aria-labelledby="process-title">
+          <p className="about-kicker">STUDIO NOTES / PROCESS</p>
+          <h2 id="process-title" data-reveal>Inside the <em>edit.</em></h2>
+          <ol>{[
+            ["Find the feeling", "Before the first cut, decide what the last frame should leave behind."],
+            ["Build the rhythm", "A held shot, a hard cut, a beat of silence. Timing gives the story its pulse."],
+            ["Finish the frame", "Colour, type and sound get one last pass. Every detail should earn its place."],
+          ].map(([heading, copy], i) => <li key={heading} data-reveal>
+            <span aria-hidden="true">0{i + 1} / 03</span><h3>{heading}</h3><p>{copy}</p>
+          </li>)}</ol>
         </section>
         <section className="about-teaching">
           <Photo

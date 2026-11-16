@@ -220,8 +220,8 @@ export function createAboutMotion(root, reduced) {
             } else
               gsap.fromTo(
                 el,
-                { y: 20, opacity: 0 },
-                { y: 0, opacity: 1, duration: 0.75, ease: "power3.out" },
+                { y: finePointer ? 18 : 8, opacity: 0 },
+                { y: 0, opacity: 1, duration: finePointer ? 0.62 : 0.42, ease: "power2.out" },
               );
           });
         observer.unobserve(el);

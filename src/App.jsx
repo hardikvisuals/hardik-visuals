@@ -271,6 +271,7 @@ export default function App({
             </button>
             <Magnetic
               className="pill menu-button"
+              stableOnTouch
               onClick={() => {
                 setMenuView("menu");
                 setMenu(true);
@@ -286,7 +287,7 @@ export default function App({
           {hovered >= 0 && (
             <>
               <span className="caption-number">
-                {String(hovered + 1).padStart(2, "0")} / 09
+                {String(hovered + 1).padStart(2, "0")} / {projects.length}
               </span>
               <strong>{projects[hovered].title}</strong>
               <span>{projects[hovered].category}</span>

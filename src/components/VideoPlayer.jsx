@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import { projects } from "../data.js";
 import CloseButton from "./CloseButton.jsx";
 
 export default function VideoPlayer({ project, muted, onClose, reduced }) {
@@ -67,7 +68,7 @@ export default function VideoPlayer({ project, muted, onClose, reduced }) {
       <div className="video-panel" ref={panel}>
         <div className="video-topline">
           <span>
-            <small>{String(project.id + 1).padStart(2, "0")} / 09</small>
+            <small>{String(project.id + 1).padStart(2, "0")} / {projects.length}</small>
             {project.title}
           </span>
           <CloseButton

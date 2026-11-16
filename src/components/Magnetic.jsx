@@ -6,6 +6,7 @@ export default function Magnetic({
   children,
   className = "",
   onClick,
+  stableOnTouch = false,
   onPointerEnter,
   onPointerLeave,
   ...props
@@ -13,12 +14,13 @@ export default function Magnetic({
   const ref = useRef(null),
     active = useRef(false);
   const { reduced } = useMotion();
+  const still = stableOnTouch && matchMedia("(hover: none), (pointer: coarse)").matches;
   useEffect(() => {
     const node = ref.current;
     return () => gsap.killTweensOf(node);
   }, []);
   function move(event) {
-    if (event.pointerType !== "mouse" || reduced) return;
+    if (event.pointerType !== "mouse" || reduced || still) return;
     const box = ref.current.getBoundingClientRect();
     const x = event.clientX - box.left - box.width / 2,
       y = event.clientY - box.top - box.height / 2;
@@ -35,7 +37,7 @@ export default function Magnetic({
   }
   function enter(event) {
     active.current = true;
-    if (!reduced)
+    if (!reduced && !still)
       gsap.to(ref.current, {
         y: -5,
         scale: 1.055,
@@ -47,6 +49,7 @@ export default function Magnetic({
   }
   function leave(event) {
     active.current = false;
+    if (still) { onPointerLeave?.(event); return; }
     gsap.to(ref.current, {
       x: 0,
       y: 0,
@@ -60,7 +63,7 @@ export default function Magnetic({
     onPointerLeave?.(event);
   }
   function press() {
-    if (!reduced)
+    if (!reduced && !still)
       gsap.to(ref.current, {
         scale: 0.97,
         y: 0,
@@ -70,7 +73,7 @@ export default function Magnetic({
       });
   }
   function release() {
-    if (!reduced)
+    if (!reduced && !still)
       gsap.to(ref.current, {
         scale: active.current ? 1.055 : 1,
         y: active.current ? -5 : 0,

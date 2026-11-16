@@ -92,7 +92,7 @@ export default function WorkIndex({
         onHover(-1);
       }}
     >
-      <span className="work-index-label">SELECTED WORK / 01—09</span>
+      <span className="work-index-label">SELECTED WORK / 01—{projects.length}</span>
       <div className="work-index-preview" ref={preview}>
         {focus >= 0 && (
           <>
